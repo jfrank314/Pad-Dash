@@ -98,9 +98,11 @@ class App:
     pad = []
 
     def __init__(self):
-        self.running = True
+        self._running = True
         self._display_surf = None
         self._coin_surf = None
+        self._player_surf = None
+        self._pad_surf = None
         self.player = Player()
         self.game = Game()
         self.coin = Coin(5, 5)
@@ -117,9 +119,9 @@ class App:
 
         pygame.init()
         pygame.display.set_caption('Pad-Dash')
-        self._display_surf = pygame.display.set_mode((self.windowWidth, self.windowHeight), pygame.HWSURFACE)
         self._running = True
-        self._image_surf = pygame.image.load("test_player_img.png").convert()
+        self._display_surf = pygame.display.set_mode((self.windowWidth, self.windowHeight), pygame.HWSURFACE)
+        self._player_surf = pygame.image.load("test_player_img.png").convert()
         self._coin_surf = pygame.image.load("test_coin_img.png").convert()
         self._pad_surf = pygame.image.load("test_padraicula_img.png").convert()
 
@@ -184,7 +186,7 @@ class App:
         """
 
         self._display_surf.fill((0, 0, 0))
-        self._display_surf.blit(self._image_surf, (self.player.x, self.player.y))
+        self._display_surf.blit(self._player_surf, (self.player.x, self.player.y))
         self.coin.draw(self._display_surf, self._coin_surf)
 
         if not self.pad:
