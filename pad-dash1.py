@@ -1,3 +1,4 @@
+import os
 import pygame
 from random import randint
 from pygame.locals import *
@@ -122,13 +123,13 @@ class App:
         pygame.display.set_caption('Pad-Dash')
         self._running = True
         self._display_surf = pygame.display.set_mode((self.windowWidth, self.windowHeight), pygame.HWSURFACE)
-        self._player_surf = pygame.image.load("test_player_img.png").convert()
-        self._coin_surf = pygame.image.load("test_coin_img.png").convert()
-        self._pad_surf = pygame.image.load("test_padraicula_img.png").convert()
+        self._player_surf = pygame.image.load(os.path.join("assets", "test_player_img.png")).convert()
+        self._coin_surf = pygame.image.load(os.path.join("assets", "test_coin_img.png")).convert()
+        self._pad_surf = pygame.image.load(os.path.join("assets", "test_padraicula_img.png")).convert()
         self._font_score = pygame.font.SysFont("monospace", 64)
 
         pygame.mixer.init()
-        pygame.mixer.music.load("background_music.mp3")
+        pygame.mixer.music.load(os.path.join("assets", "background_music.mp3"))
         pygame.mixer.music.play(-1)
         pygame.mixer.music.set_volume(0.2)
 
