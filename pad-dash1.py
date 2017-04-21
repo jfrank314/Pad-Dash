@@ -23,6 +23,7 @@ class Coin:
         self.y = y * self.step
 
     def draw(self, surface, image):
+        """ Takes in an image to draw on the surface at a specified position. """
         surface.blit(image, (self.x, self.y))
 
 
