@@ -1,13 +1,9 @@
-<<<<<<< HEAD:Game/pad-dash1.py
 #!/usr/bin/env python
 
 """ We dashin' now. """
 
 import inspect
-||||||| merged common ancestors
-=======
 import os
->>>>>>> master:pad-dash1.py
 import pygame
 from random import randint
 from pygame.locals import *
