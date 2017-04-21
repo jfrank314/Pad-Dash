@@ -171,14 +171,14 @@ class App:
                     if other_pads == pad and len(self.pad) > 1:
                         pass
 
-                    if pad.x > self.player.x and (self.game.isCollision(pad.x - 1, pad.y, other_pads.x, other_pads.y, 54, 54) == False or len(self.pad) == 1):
+                    if pad.x > self.player.x and (not self.game.isCollision(pad.x - 1, pad.y, other_pads.x, other_pads.y, 54, 54) or len(self.pad) == 1):
                         pad.moveLeft()
-                    elif pad.x < self.player.x and (self.game.isCollision(pad.x + 1, pad.y, other_pads.x, other_pads.y, 54, 54) == False or len(self.pad) == 1):
+                    elif pad.x < self.player.x and (not self.game.isCollision(pad.x + 1, pad.y, other_pads.x, other_pads.y, 54, 54) or len(self.pad) == 1):
                         pad.moveRight()
 
-                    if pad.y > self.player.y and (self.game.isCollision(pad.x, pad.y - 1, other_pads.x, other_pads.y, 54, 54) == False or len(self.pad) == 1):
+                    if pad.y > self.player.y and (not self.game.isCollision(pad.x, pad.y - 1, other_pads.x, other_pads.y, 54, 54) or len(self.pad) == 1):
                         pad.moveUp()
-                    elif pad.y < self.player.y and (self.game.isCollision(pad.x, pad.y + 1, other_pads.x, other_pads.y, 54, 54) == False or len(self.pad) == 1):
+                    elif pad.y < self.player.y and (not self.game.isCollision(pad.x, pad.y + 1, other_pads.x, other_pads.y, 54, 54) or len(self.pad) == 1):
                         pad.moveDown()
 
                 if self.game.isCollision(pad.x, pad.y, self.player.x, self.player.y, 52, 52):
