@@ -103,8 +103,9 @@ class App:
         self._coin_surf = None
         self._player_surf = None
         self._pad_surf = None
-        self.player = Player()
+        self._font_score = None
         self.game = Game()
+        self.player = Player()
         self.coin = Coin(5, 5)
         self.coin_count = 0
         self.spawned = False
@@ -124,6 +125,7 @@ class App:
         self._player_surf = pygame.image.load("test_player_img.png").convert()
         self._coin_surf = pygame.image.load("test_coin_img.png").convert()
         self._pad_surf = pygame.image.load("test_padraicula_img.png").convert()
+        self._font_score = pygame.font.SysFont("monospace", 64)
 
         pygame.mixer.init()
         pygame.mixer.music.load("background_music.mp3")
@@ -187,6 +189,8 @@ class App:
 
         self._display_surf.fill((0, 0, 0))
         self._display_surf.blit(self._player_surf, (self.player.x, self.player.y))
+        score_render = self._font_score.render(str(self.coin_count), False, (255, 255, 255))
+        self._display_surf.blit(score_render, (700, 10))
         self.coin.draw(self._display_surf, self._coin_surf)
 
         if not self.pad:
