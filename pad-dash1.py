@@ -33,16 +33,20 @@ class Player:
     y = 10
     speed = .2
 
-    def moveRight(self):
+    def move_right(self):
+        """ Moves the player right by adding the speed to the x position. """
         self.x += self.speed
 
-    def moveLeft(self):
+    def move_left(self):
+        """ Moves the player left by subtracting the speed to the x position. """
         self.x -= self.speed
 
-    def moveUp(self):
+    def move_up(self):
+        """ Moves the player up by adding the speed to the y position. """
         self.y -= self.speed
 
-    def moveDown(self):
+    def move_down(self):
+        """ Moves the player down by subtracting the speed to the y position. """
         self.y += self.speed
 
 
@@ -57,16 +61,20 @@ class Padraicula:
     y = 601
     speed = .025
 
-    def moveRight(self):    #these define the movement of the enemy
+    def move_right(self):
+        """ Moves the player right by adding the speed to the x position. """
         self.x += self.speed
 
-    def moveLeft(self):
+    def move_left(self):
+        """ Moves the player left by subtracting the speed to the x position. """
         self.x -= self.speed
 
-    def moveUp(self):
+    def move_up(self):
+        """ Moves the player up by adding the speed to the y position. """
         self.y -= self.speed
 
-    def moveDown(self):
+    def move_down(self):
+        """ Moves the player down by subtracting the speed to the y position. """
         self.y += self.speed
 
 
@@ -172,14 +180,14 @@ class App:
                         pass
 
                     if pad.x > self.player.x and (not self.game.isCollision(pad.x - 1, pad.y, other_pads.x, other_pads.y, 54, 54) or len(self.pad) == 1):
-                        pad.moveLeft()
+                        pad.move_left()
                     elif pad.x < self.player.x and (not self.game.isCollision(pad.x + 1, pad.y, other_pads.x, other_pads.y, 54, 54) or len(self.pad) == 1):
-                        pad.moveRight()
+                        pad.move_right()
 
                     if pad.y > self.player.y and (not self.game.isCollision(pad.x, pad.y - 1, other_pads.x, other_pads.y, 54, 54) or len(self.pad) == 1):
-                        pad.moveUp()
+                        pad.move_up()
                     elif pad.y < self.player.y and (not self.game.isCollision(pad.x, pad.y + 1, other_pads.x, other_pads.y, 54, 54) or len(self.pad) == 1):
-                        pad.moveDown()
+                        pad.move_down()
 
                 if self.game.isCollision(pad.x, pad.y, self.player.x, self.player.y, 52, 52):
                     self._running = False
@@ -224,16 +232,16 @@ class App:
             keys = pygame.key.get_pressed()
 
             if ((keys[K_RIGHT] or keys[K_d]) and self.player.x + 52 < self.windowWidth):
-                self.player.moveRight()
+                self.player.move_right()
 
             if ((keys[K_LEFT] or keys[K_a]) and self.player.x > 0):
-                self.player.moveLeft()
+                self.player.move_left()
 
             if ((keys[K_UP] or keys[K_w]) and self.player.y > 0):
-                self.player.moveUp()
+                self.player.move_up()
 
             if ((keys[K_DOWN] or keys[K_s]) and self.player.y + 52 < self.windowHeight):
-                self.player.moveDown()
+                self.player.move_down()
 
             if keys[K_ESCAPE]:
                 self._running = False
