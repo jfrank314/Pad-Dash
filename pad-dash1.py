@@ -38,16 +38,20 @@ class Player:
     y = 10
     speed = .2
 
-    def moveRight(self):
+    def move_right(self):
+        """ Moves the player right by adding the speed to the x position. """
         self.x += self.speed
 
-    def moveLeft(self):
+    def move_left(self):
+        """ Moves the player left by subtracting the speed to the x position. """
         self.x -= self.speed
 
-    def moveUp(self):
+    def move_up(self):
+        """ Moves the player up by adding the speed to the y position. """
         self.y -= self.speed
 
-    def moveDown(self):
+    def move_down(self):
+        """ Moves the player down by subtracting the speed to the y position. """
         self.y += self.speed
 
 
@@ -62,16 +66,20 @@ class Padraicula:
     y = 601
     speed = .025
 
-    def moveRight(self):    #these define the movement of the enemy
+    def move_right(self):
+        """ Moves the player right by adding the speed to the x position. """
         self.x += self.speed
 
-    def moveLeft(self):
+    def move_left(self):
+        """ Moves the player left by subtracting the speed to the x position. """
         self.x -= self.speed
 
-    def moveUp(self):
+    def move_up(self):
+        """ Moves the player up by adding the speed to the y position. """
         self.y -= self.speed
 
-    def moveDown(self):
+    def move_down(self):
+        """ Moves the player down by subtracting the speed to the y position. """
         self.y += self.speed
 
 
@@ -182,36 +190,37 @@ class App:
         """
 
         if self.game.is_collision(self.coin, self.player):
-            """ Checks whether or not a coin and a player has collided. """
+            # Deals with coin and player collision.
             self.coin_count += 1
             self.coin.x = randint(2, 9) * 44
             self.coin.y = randint(2, 9) * 44
 
-        if self.coin_count % 2 == 0 and self.coin_count > 0 and self.spawned == False:
-            """ Checks whether or not to spawn another Padraicula into the game. """
-            self.pad.append(Padraicula())
-            self.spawned = True
-        if self.coin_count % 2 != 0 and self.spawned == True:
-            self.spawned = False
+        if self.coin_count % 2 == 0:
+            # Deals with Padraicula spawning.
+            if self.coin_count > 0 and not self.spawned:
+                self.pad.append(Padraicula())
+                self.spawned = True
+        else:
+            if self.spawned:
+                self.spawned = False
 
         if len(self.pad) == 0:
             pass
         else:
             for pad in self.pad:
-                #print(pad.x,pad.y)
                 for other_pads in self.pad:
                     if other_pads == pad and len(self.pad) > 1:
                         pass
 
-                    if pad.x > self.player.x and (self.game.is_collision(pad, other_pads, pad_col="L") == False or len(self.pad) == 1):
-                        pad.moveLeft()
-                    elif pad.x < self.player.x and (self.game.is_collision(pad, other_pads, pad_col="R") == False or len(self.pad) == 1):
-                        pad.moveRight()
+                    if pad.x > self.player.x and (not self.game.is_collision(pad, other_pads, pad_col="L") or len(self.pad) == 1):
+                        pad.move_left()
+                    elif pad.x < self.player.x and (not self.game.is_collision(pad, other_pads, pad_col="R") or len(self.pad) == 1):
+                        pad.move_right()
 
-                    if pad.y > self.player.y and (self.game.is_collision(pad, other_pads, pad_col="U") == False or len(self.pad) == 1):
-                        pad.moveUp()
-                    elif pad.y < self.player.y and (self.game.is_collision(pad, other_pads, pad_col="D") == False or len(self.pad) == 1):
-                        pad.moveDown()
+                    if pad.y > self.player.y and (not self.game.is_collision(pad, other_pads, pad_col="U") or len(self.pad) == 1):
+                        pad.move_up()
+                    elif pad.y < self.player.y and (not self.game.is_collision(pad, other_pads, pad_col="D") or len(self.pad) == 1):
+                        pad.move_down()
 
                 if self.game.is_collision(pad, self.player):
                     self._running = False
@@ -256,16 +265,16 @@ class App:
             keys = pygame.key.get_pressed()
 
             if ((keys[K_RIGHT] or keys[K_d]) and self.player.x + 52 < self.windowWidth):
-                self.player.moveRight()
+                self.player.move_right()
 
             if ((keys[K_LEFT] or keys[K_a]) and self.player.x > 0):
-                self.player.moveLeft()
+                self.player.move_left()
 
             if ((keys[K_UP] or keys[K_w]) and self.player.y > 0):
-                self.player.moveUp()
+                self.player.move_up()
 
             if ((keys[K_DOWN] or keys[K_s]) and self.player.y + 52 < self.windowHeight):
-                self.player.moveDown()
+                self.player.move_down()
 
             if keys[K_ESCAPE]:
                 self._running = False
