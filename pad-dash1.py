@@ -149,23 +149,24 @@ class App:
         """
 
         if self.game.isCollision(self.coin.x, self.coin.y, self.player.x, self.player.y, 26, 52):
-            """ Checks whether or not a coin and a player has collided. """
+            # Deals with coin and player collision.
             self.coin_count += 1
             self.coin.x = randint(2, 9) * 44
             self.coin.y = randint(2, 9) * 44
 
-        if self.coin_count % 2 == 0 and self.coin_count > 0 and self.spawned == False:
-            """ Checks whether or not to spawn another Padraicula into the game. """
-            self.pad.append(Padraicula())
-            self.spawned = True
-        if self.coin_count % 2 != 0 and self.spawned == True:
-            self.spawned = False
+        if self.coin_count % 2 == 0:
+            # Deals with Padraicula spawning.
+            if self.coin_count > 0 and not self.spawned:
+                self.pad.append(Padraicula())
+                self.spawned = True
+        else:
+            if self.spawned:
+                self.spawned = False
 
         if len(self.pad) == 0:
             pass
         else:
             for pad in self.pad:
-                #print(pad.x,pad.y)
                 for other_pads in self.pad:
                     if other_pads == pad and len(self.pad) > 1:
                         pass
