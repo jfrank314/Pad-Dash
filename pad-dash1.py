@@ -206,7 +206,7 @@ class App:
             if self.spawned:
                 self.spawned = False
 
-        if len(self.pad) == 0:
+        if not self.pad:
             pass
         else:
             for pad in self.pad:
@@ -266,16 +266,16 @@ class App:
             pygame.event.pump()
             keys = pygame.key.get_pressed()
 
-            if ((keys[K_RIGHT] or keys[K_d]) and self.player.x + 52 < self.windowWidth):
+            if (keys[K_RIGHT] or keys[K_d]) and self.player.x + 52 < self.windowWidth:
                 self.player.move_right()
 
-            if ((keys[K_LEFT] or keys[K_a]) and self.player.x > 0):
+            if (keys[K_LEFT] or keys[K_a]) and self.player.x > 0:
                 self.player.move_left()
 
-            if ((keys[K_UP] or keys[K_w]) and self.player.y > 0):
+            if (keys[K_UP] or keys[K_w]) and self.player.y > 0:
                 self.player.move_up()
 
-            if ((keys[K_DOWN] or keys[K_s]) and self.player.y + 52 < self.windowHeight):
+            if (keys[K_DOWN] or keys[K_s]) and self.player.y + 52 < self.windowHeight:
                 self.player.move_down()
 
             if keys[K_ESCAPE]:
