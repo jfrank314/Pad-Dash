@@ -2,10 +2,9 @@
 
 """ We dashin' now. """
 
-import inspect
 import os
-import pygame
 from random import randint
+import pygame
 from pygame.locals import *
 
 class Coin:
