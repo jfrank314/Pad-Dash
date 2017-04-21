@@ -36,7 +36,7 @@ class Player:
 
     x = 10
     y = 10
-    speed = .2
+    speed = 8
 
     def move_right(self):
         """ Moves the player right by adding the speed to the x position. """
@@ -64,7 +64,7 @@ class Padraicula:
 
     x = 801
     y = 601
-    speed = .025
+    speed = 0.5
 
     def move_right(self):
         """ Moves the player right by adding the speed to the x position. """
@@ -146,6 +146,7 @@ class App:
         self._player_surf = None
         self._pad_surf = None
         self._font_score = None
+        self._clock = None
         self.game = Game()
         self.player = Player()
         self.coin = Coin(5, 5)
@@ -162,6 +163,7 @@ class App:
 
         pygame.init()
         pygame.display.set_caption('Pad-Dash')
+        self._clock = pygame.time.Clock()
         self._running = True
         self._display_surf = pygame.display.set_mode((self.windowWidth, self.windowHeight), pygame.HWSURFACE)
         self._player_surf = pygame.image.load(os.path.join("assets", "test_player_img.png")).convert()
@@ -285,6 +287,9 @@ class App:
 
             self.on_loop()
             self.on_render()
+            self._clock.tick(60)
+            pygame.display.set_caption('Pad-Dash | FPS: {0:.2f}'.format(self._clock.get_fps()))
+
 
         self.on_cleanup()
 
