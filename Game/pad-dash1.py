@@ -1,3 +1,8 @@
+#!/usr/bin/env python
+
+""" We dashin' now. """
+
+import inspect
 import pygame
 from random import randint
 from pygame.locals import *
@@ -74,8 +79,36 @@ class Game:
     Contains methods that are related to elements within the game state.
     """
 
-    def isCollision(self, x1, y1, x2, y2, size1, size2):
+    def is_collision(self, object_1, object_2, pad_col=None):
         """ Checks whether or not two objects have collided. """
+
+        if isinstance(object_1, Coin):
+            size1 = 26
+        else:
+            size1 = 52
+
+        if isinstance(object_2, Coin):
+            size2 = 26
+        else:
+            size2 = 52
+
+        x1 = object_1.x
+        y1 = object_1.y
+        x2 = object_2.x
+        y2 = object_2.y
+        optional_direction = pad_col
+
+        if optional_direction == "L":
+            x1 -= 1
+        elif optional_direction == "R":
+            x1 += 1
+        elif optional_direction == "U":
+            y1 -= 1
+        elif optional_direction == "D":
+            y1 += 1
+        else:
+            pass
+
         if x1 >= x2 and x1 <= x2 + size2:
             if y1 >= y2 and y1 <= y2 + size2:
                 return True
@@ -145,7 +178,7 @@ class App:
         Deals with conditions that need to be checked every iteration of the game.
         """
 
-        if self.game.isCollision(self.coin.x, self.coin.y, self.player.x, self.player.y, 26, 52):
+        if self.game.is_collision(self.coin, self.player):
             """ Checks whether or not a coin and a player has collided. """
             self.coin_count += 1
             self.coin.x = randint(2, 9) * 44
@@ -167,17 +200,17 @@ class App:
                     if other_pads == pad and len(self.pad) > 1:
                         pass
 
-                    if pad.x > self.player.x and (self.game.isCollision(pad.x - 1, pad.y, other_pads.x, other_pads.y, 54, 54) == False or len(self.pad) == 1):
+                    if pad.x > self.player.x and (self.game.is_collision(pad, other_pads, pad_col="L") == False or len(self.pad) == 1):
                         pad.moveLeft()
-                    elif pad.x < self.player.x and (self.game.isCollision(pad.x + 1, pad.y, other_pads.x, other_pads.y, 54, 54) == False or len(self.pad) == 1):
+                    elif pad.x < self.player.x and (self.game.is_collision(pad, other_pads, pad_col="R") == False or len(self.pad) == 1):
                         pad.moveRight()
 
-                    if pad.y > self.player.y and (self.game.isCollision(pad.x, pad.y - 1, other_pads.x, other_pads.y, 54, 54) == False or len(self.pad) == 1):
+                    if pad.y > self.player.y and (self.game.is_collision(pad, other_pads, pad_col="U") == False or len(self.pad) == 1):
                         pad.moveUp()
-                    elif pad.y < self.player.y and (self.game.isCollision(pad.x, pad.y + 1, other_pads.x, other_pads.y, 54, 54) == False or len(self.pad) == 1):
+                    elif pad.y < self.player.y and (self.game.is_collision(pad, other_pads, pad_col="D") == False or len(self.pad) == 1):
                         pad.moveDown()
 
-                if self.game.isCollision(pad.x, pad.y, self.player.x, self.player.y, 52, 52):
+                if self.game.is_collision(pad, self.player):
                     self._running = False
 
     def on_render(self):
