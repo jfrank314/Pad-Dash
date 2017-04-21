@@ -13,12 +13,13 @@ class Coin:
     y = 0
     step = 44
 
-    def __init__(self,x,y):
+    def __init__(self, x, y):
         self.x = x * self.step
         self.y = y * self.step
 
     def draw(self, surface, image):
-        surface.blit(image,(self.x, self.y))
+        surface.blit(image, (self.x, self.y))
+
 
 class Player:
     """
@@ -31,8 +32,8 @@ class Player:
     y = 10
     speed = .2
 
-    def moveRight(self):    #these define the movement of the player
-        self.x  += self.speed
+    def moveRight(self):
+        self.x += self.speed
 
     def moveLeft(self):
         self.x -= self.speed
@@ -42,6 +43,7 @@ class Player:
 
     def moveDown(self):
         self.y += self.speed
+
 
 class Padraicula:
     """
@@ -54,9 +56,8 @@ class Padraicula:
     y = 601
     speed = .025
 
-
     def moveRight(self):    #these define the movement of the enemy
-        self.x  += self.speed
+        self.x += self.speed
 
     def moveLeft(self):
         self.x -= self.speed
@@ -101,7 +102,7 @@ class App:
         self._coin_surf = None
         self.player = Player()
         self.game = Game()
-        self.coin = Coin(5,5)
+        self.coin = Coin(5, 5)
         self.coin_count = 0
         self.spawned = False
 
@@ -115,6 +116,7 @@ class App:
 
         pygame.init()
         pygame.display.set_caption('Pad-Dash')
+        self._display_surf = pygame.display.set_mode((self.windowWidth, self.windowHeight), pygame.HWSURFACE)
         self._running = True
         self._image_surf = pygame.image.load("test_player_img.png").convert()
         self._coin_surf = pygame.image.load("test_coin_img.png").convert()
@@ -122,7 +124,9 @@ class App:
 
         pygame.mixer.init()
         pygame.mixer.music.load("background_music.mp3")
+        pygame.mixer.music.set_volume(0.5)
         pygame.mixer.music.play(-1)
+
     def on_event(self, event):
         """
         Handles the events passed through to the game itself.
@@ -160,10 +164,10 @@ class App:
                     if other_pads == pad and len(self.pad) > 1:
                         pass
 
-                    if pad.x > self.player.x  and (self.game.isCollision(pad.x - 1, pad.y, other_pads.x, other_pads.y, 54, 54) == False or len(self.pad) == 1):
+                    if pad.x > self.player.x and (self.game.isCollision(pad.x - 1, pad.y, other_pads.x, other_pads.y, 54, 54) == False or len(self.pad) == 1):
                         pad.moveLeft()
                     elif pad.x < self.player.x and (self.game.isCollision(pad.x + 1, pad.y, other_pads.x, other_pads.y, 54, 54) == False or len(self.pad) == 1):
-                        pad.moveRight(  )
+                        pad.moveRight()
 
                     if pad.y > self.player.y and (self.game.isCollision(pad.x, pad.y - 1, other_pads.x, other_pads.y, 54, 54) == False or len(self.pad) == 1):
                         pad.moveUp()
@@ -172,8 +176,6 @@ class App:
 
                 if self.game.isCollision(pad.x, pad.y, self.player.x, self.player.y, 52, 52):
                     self._running = False
-
-        pass
 
     def on_render(self):
         """
@@ -238,5 +240,5 @@ class App:
 
 
 if __name__ == "__main__":
-    theApp = App()
-    theApp.on_execute()
+    THEAPP = App()
+    THEAPP.on_execute()
