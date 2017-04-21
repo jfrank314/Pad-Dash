@@ -75,6 +75,7 @@ class Game:
     """
 
     def isCollision(self, x1, y1, x2, y2, size1, size2):
+        """ Checks whether or not two objects have collided. """
         if x1 >= x2 and x1 <= x2 + size2:
             if y1 >= y2 and y1 <= y2 + size2:
                 return True
