@@ -84,6 +84,7 @@ class Player(pygame.sprite.Sprite):
 
         self.image = self.f_idle_front[0]
         self.frame = 0
+        self.count = 0
         self.rect = self.image.get_rect()
 
     def update(self):
@@ -92,6 +93,16 @@ class Player(pygame.sprite.Sprite):
             self.rect.x += self.change_x
         if (self.rect.y + HEIGHT * 2 + self.change_y) < THEAPP.windowHeight and (self.rect.y + self.change_y) > 0:
             self.rect.y += self.change_y
+
+        if self.frame + 1 < len(self.f_idle_front):
+            if self.count == 4:
+                self.frame += 1
+                self.count = 0
+            else:
+                self.count += 1
+        else:
+            self.frame = 0
+        self.image = self.f_idle_front[self.frame]
 
     def move_right(self):
         """ Moves the player right by adding the speed to the x position. """
