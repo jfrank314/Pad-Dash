@@ -220,7 +220,6 @@ class App:
         self._running = True
         self._display_surf = pygame.display.set_mode((self.windowWidth, self.windowHeight), pygame.HWSURFACE)
         self._coin_surf = None
-        #self._player_surf = None
         self._pad_surf = None
         self._font_score = None
         self._clock = None
@@ -246,7 +245,6 @@ class App:
         pygame.display.set_caption('Pad-Dash')
         self._clock = pygame.time.Clock()
         self._running = True
-        #self._player_surf = pygame.image.load(os.path.join("assets", "test_player_img.png")).convert()
         self._coin_surf = pygame.image.load(os.path.join("assets", "test_coin_img.png")).convert()
         self._pad_surf = pygame.image.load(os.path.join("assets", "test_padraicula_img.png")).convert()
         self._font_score = pygame.font.SysFont("monospace", 64)
