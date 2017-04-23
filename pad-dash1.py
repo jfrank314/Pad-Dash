@@ -398,8 +398,43 @@ class App:
         if self.game.is_collision(self.coin, self.player):
             # Deals with coin and player collision.
             self.coin_count += 1
-            self.coin.x = randint(2, 9) * 44
-            self.coin.y = randint(2, 9) * 44
+
+            """ Instead of having it spawn in a random spot, we'll split it to the four
+                quadrants that the game provides, and we try to spawn one in a different
+                quadrant.
+            """
+            quadrants = [(0, 0), (self.windowWidth / 2, 0), \
+                (self.windowHeight / 2, 0), (self.windowHeight / 2, self.windowHeight / 2)]
+
+            player_position = (self.player.rect.x, self.player.rect.y)
+            player_quadrant = -1
+
+            if 0 <= player_position[0] < self.windowHeight / 2:
+                # Upper half of the board.
+                if 0 <= player_position[1] < self.windowWidth / 2:
+                    # Upper left.
+                    player_quadrant = 0
+                else:
+                    # Upper right.
+                    player_quadrant = 1
+            else:
+                # Lower half of the board.
+                if 0 <= player_position[1] < self.windowWidth / 2:
+                    # Lower left.
+                    player_quadrant = 2
+                else:
+                    # Lower right.
+                    player_quadrant = 3
+
+            coin_quadrant = player_quadrant
+            while coin_quadrant == player_quadrant:
+                coin_quadrant = randint(0, 3)
+
+            if randint(0, 2) == 2:
+                coin_quadrant = player_quadrant
+
+            self.coin.x = quadrants[coin_quadrant][0] + randint(1, 6) * 64
+            self.coin.y = quadrants[coin_quadrant][1] + randint(1, 6) * 64
 
         if self.coin_count % 2 == 0:
             # Deals with Padraicula spawning.
