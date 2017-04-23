@@ -168,10 +168,10 @@ class Player(pygame.sprite.Sprite):
 
     def update(self):
         """ Updates the current position of the rectangle on screen. """
-        if self.rect.x + WIDTH * 2 + self.change_x < THEAPP.windowWidth:
+        if self.rect.x + WIDTH * 4 + self.change_x < THEAPP.windowWidth:
             if self.rect.x + self.change_x > 0:
                 self.rect.x += self.change_x
-        if self.rect.y + HEIGHT * 2 + self.change_y < THEAPP.windowHeight:
+        if self.rect.y + HEIGHT * 4 + self.change_y < THEAPP.windowHeight:
             if self.rect.y + self.change_y > 0:
                 self.rect.y += self.change_y
 
@@ -229,7 +229,7 @@ class Player(pygame.sprite.Sprite):
         self.change_x = -1. * self.speed
 
     def move_updown(self, magnitude):
-        """ Moves the player up or down by changing the magnitude of change_y. 
+        """ Moves the player up or down by changing the magnitude of change_y.
             magnitude = 0: don't move up/down
             magnitude = 1: change y in the down direction (positive)
             magnitude = -1: change y in the up direction (negative)
