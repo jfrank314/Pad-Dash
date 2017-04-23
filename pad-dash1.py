@@ -47,9 +47,10 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
 
         """ Need to set initial position and speed of the player. """
-        self.x = 10
-        self.y = 10
+        self.change_x = 0
+        self.change_y = 0
         self.speed = 8
+        self.direction = "IF"
 
         """ We have a lot of animations: idle, forward, left, right (flip left),
             back idle, back forward, back left, back right (flip back left).
@@ -62,8 +63,6 @@ class Player(pygame.sprite.Sprite):
         self.f_walking_back = []
         self.f_walking_back_left = []
         self.f_walking_back_right = []
-
-        self.direction = "IF"
 
         sprite_sheet = SpriteSheet(os.path.join("assets", "sprites.png"))
 
@@ -84,24 +83,36 @@ class Player(pygame.sprite.Sprite):
         self.f_idle_front.append(image)
 
         self.image = self.f_idle_front[0]
-
+        self.frame = 0
         self.rect = self.image.get_rect()
+
+    def update(self):
+        if (self.rect.x + WIDTH + self.change_x) < THEAPP.windowWidth and (self.rect.x + self.change_x) > 0:
+            self.rect.x += self.change_x
+        self.image = self.f_idle_front[self.frame + 1 if self.frame < len(self.f_idle_front) else 0]
+        if (self.rect.y + HEIGHT + self.change_y) < THEAPP.windowHeight and (self.rect.y + self.change_y) > 0:
+            self.rect.y += self.change_y
 
     def move_right(self):
         """ Moves the player right by adding the speed to the x position. """
-        self.x += self.speed
+        self.change_x = self.speed
 
     def move_left(self):
         """ Moves the player left by subtracting the speed to the x position. """
-        self.x -= self.speed
+        self.change_x = -1. * self.speed
 
     def move_up(self):
         """ Moves the player up by adding the speed to the y position. """
-        self.y -= self.speed
+        self.change_y = -1. * self.speed
 
     def move_down(self):
         """ Moves the player down by subtracting the speed to the y position. """
-        self.y += self.speed
+        self.change_y = self.speed
+
+    def no_move(self):
+        """ Player stops moving. """
+        self.change_x = 0
+        self.change_y = 0
 
 
 class Padraicula:
@@ -150,10 +161,11 @@ class Game:
         else:
             size2 = 52
 
-        x1 = object_1.x
-        y1 = object_1.y
-        x2 = object_2.x
-        y2 = object_2.y
+        x1 = object_1.x if not isinstance(object_1, Player) else object_1.rect.x
+        y1 = object_1.y if not isinstance(object_1, Player) else object_1.rect.y
+        x2 = object_2.x if not isinstance(object_2, Player) else object_2.rect.x
+        y2 = object_2.y if not isinstance(object_2, Player) else object_2.rect.y
+
         optional_direction = pad_col
 
         if optional_direction == "L":
@@ -202,6 +214,8 @@ class App:
         self.coin = Coin(5, 5)
         self.coin_count = 0
         self.spawned = False
+        self.player.rect.x = 10
+        self.player.rect.y = 10
         self.active_sprites.add(self.player)
 
     def on_init(self):
@@ -264,14 +278,14 @@ class App:
                     if other_pads == pad and len(self.pad) > 1:
                         pass
 
-                    if pad.x > self.player.x and (not self.game.is_collision(pad, other_pads, pad_col="L") or len(self.pad) == 1):
+                    if pad.x > self.player.rect.x and (not self.game.is_collision(pad, other_pads, pad_col="L") or len(self.pad) == 1):
                         pad.move_left()
-                    elif pad.x < self.player.x and (not self.game.is_collision(pad, other_pads, pad_col="R") or len(self.pad) == 1):
+                    elif pad.x < self.player.rect.x and (not self.game.is_collision(pad, other_pads, pad_col="R") or len(self.pad) == 1):
                         pad.move_right()
 
-                    if pad.y > self.player.y and (not self.game.is_collision(pad, other_pads, pad_col="U") or len(self.pad) == 1):
+                    if pad.y > self.player.rect.y and (not self.game.is_collision(pad, other_pads, pad_col="U") or len(self.pad) == 1):
                         pad.move_up()
-                    elif pad.y < self.player.y and (not self.game.is_collision(pad, other_pads, pad_col="D") or len(self.pad) == 1):
+                    elif pad.y < self.player.rect.y and (not self.game.is_collision(pad, other_pads, pad_col="D") or len(self.pad) == 1):
                         pad.move_down()
 
                 if self.game.is_collision(pad, self.player):
@@ -284,7 +298,7 @@ class App:
 
         self._display_surf.fill((0, 0, 0))
         #self._display_surf.blit(self._player_surf, (self.player.x, self.player.y))
-        
+        self.active_sprites.draw(self._display_surf)
         score_render = self._font_score.render(str(self.coin_count), False, (255, 255, 255))
         self._display_surf.blit(score_render, (700, 10))
         self.coin.draw(self._display_surf, self._coin_surf)
@@ -317,17 +331,20 @@ class App:
             pygame.event.pump()
             keys = pygame.key.get_pressed()
 
-            if (keys[K_RIGHT] or keys[K_d]) and self.player.x + 52 < self.windowWidth:
+            if (keys[K_RIGHT] or keys[K_d]):
                 self.player.move_right()
 
-            if (keys[K_LEFT] or keys[K_a]) and self.player.x > 0:
+            if (keys[K_LEFT] or keys[K_a]):
                 self.player.move_left()
 
-            if (keys[K_UP] or keys[K_w]) and self.player.y > 0:
+            if (keys[K_UP] or keys[K_w]):
                 self.player.move_up()
 
-            if (keys[K_DOWN] or keys[K_s]) and self.player.y + 52 < self.windowHeight:
+            if (keys[K_DOWN] or keys[K_s]):
                 self.player.move_down()
+
+            if not (keys[K_RIGHT] or keys[K_LEFT] or keys[K_UP] or keys[K_DOWN] or keys[K_d] or keys[K_a] or keys[K_w] or keys[K_s]):
+                self.player.no_move()
 
             if keys[K_ESCAPE]:
                 self._running = False
