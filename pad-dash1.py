@@ -68,29 +68,29 @@ class Player(pygame.sprite.Sprite):
 
         """ First, idle front animation. """
         image = sprite_sheet.get_image(32, 32, WIDTH, HEIGHT)
-        self.f_idle_front.append(image)
+        self.f_idle_front.append(pygame.transform.scale2x(image))
         image = sprite_sheet.get_image(64, 32, WIDTH, HEIGHT)
-        self.f_idle_front.append(image)
+        self.f_idle_front.append(pygame.transform.scale2x(image))
         image = sprite_sheet.get_image(96, 32, WIDTH, HEIGHT)
-        self.f_idle_front.append(image)
+        self.f_idle_front.append(pygame.transform.scale2x(image))
         image = sprite_sheet.get_image(128, 32, WIDTH, HEIGHT)
-        self.f_idle_front.append(image)
+        self.f_idle_front.append(pygame.transform.scale2x(image))
         image = sprite_sheet.get_image(160, 32, WIDTH, HEIGHT)
-        self.f_idle_front.append(image)
+        self.f_idle_front.append(pygame.transform.scale2x(image))
         image = sprite_sheet.get_image(192, 32, WIDTH, HEIGHT)
-        self.f_idle_front.append(image)
+        self.f_idle_front.append(pygame.transform.scale2x(image))
         image = sprite_sheet.get_image(0, 64, WIDTH, HEIGHT)
-        self.f_idle_front.append(image)
+        self.f_idle_front.append(pygame.transform.scale2x(image))
 
         self.image = self.f_idle_front[0]
         self.frame = 0
         self.rect = self.image.get_rect()
 
     def update(self):
-        if (self.rect.x + WIDTH + self.change_x) < THEAPP.windowWidth and (self.rect.x + self.change_x) > 0:
+        """ Updates the current position of the rectangle on screen. """
+        if (self.rect.x + WIDTH * 2 + self.change_x) < THEAPP.windowWidth and (self.rect.x + self.change_x) > 0:
             self.rect.x += self.change_x
-        self.image = self.f_idle_front[self.frame + 1 if self.frame < len(self.f_idle_front) else 0]
-        if (self.rect.y + HEIGHT + self.change_y) < THEAPP.windowHeight and (self.rect.y + self.change_y) > 0:
+        if (self.rect.y + HEIGHT * 2 + self.change_y) < THEAPP.windowHeight and (self.rect.y + self.change_y) > 0:
             self.rect.y += self.change_y
 
     def move_right(self):
