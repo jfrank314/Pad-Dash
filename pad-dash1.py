@@ -43,10 +43,10 @@ class Player(pygame.sprite.Sprite):
     def __init__(self):
         """ Constructing the player... """
 
-        """ Let's use the parent (sprite) constructor. """
+        # Let's use the parent (sprite) constructor.
         super().__init__()
 
-        """ Need to set initial position and speed of the player. """
+        # Need to set initial position and speed of the player.
         self.change_x = 0
         self.change_y = 0
         self.speed = 8
@@ -56,7 +56,7 @@ class Player(pygame.sprite.Sprite):
             back idle, back forward, back left, back right (flip back left).
         """
         self.f_idle_front = []
-        self.f_idle_back  = []
+        self.f_idle_back = []
         self.f_walking_front = []
         self.f_walking_front_left = []
         self.f_walking_front_right = []
