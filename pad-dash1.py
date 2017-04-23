@@ -6,6 +6,10 @@ import os
 from random import randint
 import pygame
 from pygame.locals import *
+from spritesheet_functions import SpriteSheet
+
+WIDTH = 32
+HEIGHT = 32
 
 class Coin:
     """
@@ -27,16 +31,61 @@ class Coin:
         surface.blit(image, (self.x, self.y))
 
 
-class Player:
+class Player(pygame.sprite.Sprite):
     """
     Deals with the variables for player information: positioning, and how fast they can move.
 
     Has an x, y, and speed for initial positioning of the player, and how fast they can move.
+
+    Also, initializes the player to be a sprite based off of the sprite passed through.
     """
 
-    x = 10
-    y = 10
-    speed = 8
+    def __init__(self):
+        """ Constructing the player... """
+
+        """ Let's use the parent (sprite) constructor. """
+        super().__init__()
+
+        """ Need to set initial position and speed of the player. """
+        self.x = 10
+        self.y = 10
+        self.speed = 8
+
+        """ We have a lot of animations: idle, forward, left, right (flip left),
+            back idle, back forward, back left, back right (flip back left).
+        """
+        self.f_idle_front = []
+        self.f_idle_back  = []
+        self.f_walking_front = []
+        self.f_walking_front_left = []
+        self.f_walking_front_right = []
+        self.f_walking_back = []
+        self.f_walking_back_left = []
+        self.f_walking_back_right = []
+
+        self.direction = "IF"
+
+        sprite_sheet = SpriteSheet(os.path.join("assets", "sprites.png"))
+
+        """ First, idle front animation. """
+        image = sprite_sheet.get_image(32, 32, WIDTH, HEIGHT)
+        self.f_idle_front.append(image)
+        image = sprite_sheet.get_image(64, 32, WIDTH, HEIGHT)
+        self.f_idle_front.append(image)
+        image = sprite_sheet.get_image(96, 32, WIDTH, HEIGHT)
+        self.f_idle_front.append(image)
+        image = sprite_sheet.get_image(128, 32, WIDTH, HEIGHT)
+        self.f_idle_front.append(image)
+        image = sprite_sheet.get_image(160, 32, WIDTH, HEIGHT)
+        self.f_idle_front.append(image)
+        image = sprite_sheet.get_image(192, 32, WIDTH, HEIGHT)
+        self.f_idle_front.append(image)
+        image = sprite_sheet.get_image(0, 64, WIDTH, HEIGHT)
+        self.f_idle_front.append(image)
+
+        self.image = self.f_idle_front[0]
+
+        self.rect = self.image.get_rect()
 
     def move_right(self):
         """ Moves the player right by adding the speed to the x position. """
@@ -141,17 +190,19 @@ class App:
 
     def __init__(self):
         self._running = True
-        self._display_surf = None
+        self._display_surf = pygame.display.set_mode((self.windowWidth, self.windowHeight), pygame.HWSURFACE)
         self._coin_surf = None
-        self._player_surf = None
+        #self._player_surf = None
         self._pad_surf = None
         self._font_score = None
         self._clock = None
+        self.active_sprites = pygame.sprite.Group()
         self.game = Game()
         self.player = Player()
         self.coin = Coin(5, 5)
         self.coin_count = 0
         self.spawned = False
+        self.active_sprites.add(self.player)
 
     def on_init(self):
         """
@@ -165,8 +216,7 @@ class App:
         pygame.display.set_caption('Pad-Dash')
         self._clock = pygame.time.Clock()
         self._running = True
-        self._display_surf = pygame.display.set_mode((self.windowWidth, self.windowHeight), pygame.HWSURFACE)
-        self._player_surf = pygame.image.load(os.path.join("assets", "test_player_img.png")).convert()
+        #self._player_surf = pygame.image.load(os.path.join("assets", "test_player_img.png")).convert()
         self._coin_surf = pygame.image.load(os.path.join("assets", "test_coin_img.png")).convert()
         self._pad_surf = pygame.image.load(os.path.join("assets", "test_padraicula_img.png")).convert()
         self._font_score = pygame.font.SysFont("monospace", 64)
@@ -233,7 +283,8 @@ class App:
         """
 
         self._display_surf.fill((0, 0, 0))
-        self._display_surf.blit(self._player_surf, (self.player.x, self.player.y))
+        #self._display_surf.blit(self._player_surf, (self.player.x, self.player.y))
+        
         score_render = self._font_score.render(str(self.coin_count), False, (255, 255, 255))
         self._display_surf.blit(score_render, (700, 10))
         self.coin.draw(self._display_surf, self._coin_surf)
@@ -285,11 +336,12 @@ class App:
                 if event.type == pygame.QUIT:
                     self._running = False
 
+            self.active_sprites.update()
             self.on_loop()
             self.on_render()
             self._clock.tick(60)
             pygame.display.set_caption('Pad-Dash | FPS: {0:.2f}'.format(self._clock.get_fps()))
-
+            pygame.display.flip()
 
         self.on_cleanup()
 
