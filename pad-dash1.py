@@ -50,12 +50,10 @@ class Player(pygame.sprite.Sprite):
         # Need to set initial position and speed of the player.
         self.change_x = 0
         self.change_y = 0
-        self.speed = 8
+        self.speed = 6
         self.direction = "IF"
 
-        """ We have a lot of animations: idle, forward, left, right (flip left),
-            back idle, back forward, back left, back right (flip back left).
-        """
+        # We have a lot of animations: idle, forward, back idle, back forward.
         self.f_idle_front = []
         self.f_idle_back = []
         self.f_walking_front = []
