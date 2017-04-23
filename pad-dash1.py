@@ -59,11 +59,7 @@ class Player(pygame.sprite.Sprite):
         self.f_idle_front = []
         self.f_idle_back = []
         self.f_walking_front = []
-        self.f_walking_front_left = []
-        self.f_walking_front_right = []
         self.f_walking_back = []
-        self.f_walking_back_left = []
-        self.f_walking_back_right = []
 
         sprite_sheet = SpriteSheet(os.path.join("assets", "sprites.png"))
 
@@ -216,17 +212,28 @@ class Player(pygame.sprite.Sprite):
             else:
                 self.frame = 0
             self.image = self.f_walking_back[self.frame]
-
         else:
             self.image = self.f_idle_front[0]
 
-    def move_right(self):
-        """ Moves the player right by adding the speed to the x position. """
-        self.change_x = self.speed
-
-    def move_left(self):
-        """ Moves the player left by subtracting the speed to the x position. """
-        self.change_x = -1. * self.speed
+    def move_rightleft(self, magnitude):
+        """ Moves the player right or left by changing the magnitude of change_x.
+            magnitude = 0: don't move up/down
+            magnitude = 1: change x in the right direction (positive)
+            magnitude = -1: change x in the left direction (negative)
+        """
+        if self.change_x > 0 and magnitude == 0:
+            # we were moving right before, now we're not. we need to show idle front.
+            self.direction = "IF"
+        elif self.change_x < 0 and magnitude == 0:
+            # we were moving left before, now we're not. we need to show idle front.
+            self.direction = "IF"
+        elif magnitude == 1:
+            self.direction = "WF"
+        elif magnitude == -1:
+            self.direction = "WB"
+        else:
+            self.direction = "IF"
+        self.change_x = magnitude * 1.0 * self.speed
 
     def move_updown(self, magnitude):
         """ Moves the player up or down by changing the magnitude of change_y.
@@ -516,9 +523,9 @@ class App:
                     if event.key == pygame.K_ESCAPE:
                         self._running = False
                     if event.key in right:
-                        self.player.move_right()
+                        self.player.move_rightleft(1)
                     if event.key in left:
-                        self.player.move_left()
+                        self.player.move_rightleft(-1)
                     if event.key in up:
                         self.player.move_updown(-1)
                     if event.key in down:
@@ -526,7 +533,7 @@ class App:
 
                 if event.type == pygame.KEYUP:
                     if event.key in left or event.key in right:
-                        self.player.no_move(0)
+                        self.player.move_rightleft(0)
                     if event.key in up or event.key in down:
                         self.player.move_updown(0)
 
