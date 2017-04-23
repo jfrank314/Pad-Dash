@@ -10,6 +10,7 @@ from spritesheet_functions import SpriteSheet
 
 WIDTH = 32
 HEIGHT = 32
+CHROMA = (0, 255, 0)
 
 class Coin:
     """
@@ -66,21 +67,67 @@ class Player(pygame.sprite.Sprite):
 
         sprite_sheet = SpriteSheet(os.path.join("assets", "sprites.png"))
 
-        """ First, idle front animation. """
-        image = sprite_sheet.get_image(32, 32, WIDTH, HEIGHT)
+        # First, idle front animation.
+        image = sprite_sheet.get_image(32, 32, WIDTH, HEIGHT, CHROMA)
         self.f_idle_front.append(pygame.transform.scale2x(image))
-        image = sprite_sheet.get_image(64, 32, WIDTH, HEIGHT)
+        image = sprite_sheet.get_image(64, 32, WIDTH, HEIGHT, CHROMA)
         self.f_idle_front.append(pygame.transform.scale2x(image))
-        image = sprite_sheet.get_image(96, 32, WIDTH, HEIGHT)
+        image = sprite_sheet.get_image(96, 32, WIDTH, HEIGHT, CHROMA)
         self.f_idle_front.append(pygame.transform.scale2x(image))
-        image = sprite_sheet.get_image(128, 32, WIDTH, HEIGHT)
+        image = sprite_sheet.get_image(128, 32, WIDTH, HEIGHT, CHROMA)
         self.f_idle_front.append(pygame.transform.scale2x(image))
-        image = sprite_sheet.get_image(160, 32, WIDTH, HEIGHT)
+        image = sprite_sheet.get_image(160, 32, WIDTH, HEIGHT, CHROMA)
         self.f_idle_front.append(pygame.transform.scale2x(image))
-        image = sprite_sheet.get_image(192, 32, WIDTH, HEIGHT)
+        image = sprite_sheet.get_image(192, 32, WIDTH, HEIGHT, CHROMA)
         self.f_idle_front.append(pygame.transform.scale2x(image))
-        image = sprite_sheet.get_image(0, 64, WIDTH, HEIGHT)
+        image = sprite_sheet.get_image(0, 64, WIDTH, HEIGHT, CHROMA)
         self.f_idle_front.append(pygame.transform.scale2x(image))
+
+        # Next, idle back animation.
+        image = sprite_sheet.get_image(128, 128, WIDTH, HEIGHT, CHROMA)
+        self.f_idle_back.append(pygame.transform.scale2x(image))
+        image = sprite_sheet.get_image(160, 128, WIDTH, HEIGHT, CHROMA)
+        self.f_idle_back.append(pygame.transform.scale2x(image))
+        image = sprite_sheet.get_image(192, 128, WIDTH, HEIGHT, CHROMA)
+        self.f_idle_back.append(pygame.transform.scale2x(image))
+        image = sprite_sheet.get_image(0, 160, WIDTH, HEIGHT, CHROMA)
+        self.f_idle_back.append(pygame.transform.scale2x(image))
+        image = sprite_sheet.get_image(32, 160, WIDTH, HEIGHT, CHROMA)
+        self.f_idle_back.append(pygame.transform.scale2x(image))
+        image = sprite_sheet.get_image(64, 160, WIDTH, HEIGHT, CHROMA)
+        self.f_idle_back.append(pygame.transform.scale2x(image))
+        image = sprite_sheet.get_image(96, 160, WIDTH, HEIGHT, CHROMA)
+        self.f_idle_back.append(pygame.transform.scale2x(image))
+
+        # Next, walking front animation.
+        image = sprite_sheet.get_image(32, 64, WIDTH, HEIGHT, CHROMA)
+        self.f_walking_front.append(pygame.transform.scale2x(image))
+        image = sprite_sheet.get_image(32, 96, WIDTH, HEIGHT, CHROMA)
+        self.f_walking_front.append(pygame.transform.scale2x(image))
+        image = sprite_sheet.get_image(64, 64, WIDTH, HEIGHT, CHROMA)
+        self.f_walking_front.append(pygame.transform.scale2x(image))
+        image = sprite_sheet.get_image(64, 96, WIDTH, HEIGHT, CHROMA)
+        self.f_walking_front.append(pygame.transform.scale2x(image))
+        image = sprite_sheet.get_image(96, 64, WIDTH, HEIGHT, CHROMA)
+        self.f_walking_front.append(pygame.transform.scale2x(image))
+        image = sprite_sheet.get_image(96, 96, WIDTH, HEIGHT, CHROMA)
+        self.f_walking_front.append(pygame.transform.scale2x(image))
+        image = sprite_sheet.get_image(128, 64, WIDTH, HEIGHT, CHROMA)
+        self.f_walking_front.append(pygame.transform.scale2x(image))
+        image = sprite_sheet.get_image(128, 96, WIDTH, HEIGHT, CHROMA)
+        self.f_walking_front.append(pygame.transform.scale2x(image))
+        image = sprite_sheet.get_image(160, 64, WIDTH, HEIGHT, CHROMA)
+        self.f_walking_front.append(pygame.transform.scale2x(image))
+        image = sprite_sheet.get_image(160, 96, WIDTH, HEIGHT, CHROMA)
+        self.f_walking_front.append(pygame.transform.scale2x(image))
+        image = sprite_sheet.get_image(192, 64, WIDTH, HEIGHT, CHROMA)
+        self.f_walking_front.append(pygame.transform.scale2x(image))
+        image = sprite_sheet.get_image(192, 96, WIDTH, HEIGHT, CHROMA)
+        self.f_walking_front.append(pygame.transform.scale2x(image))
+        image = sprite_sheet.get_image(0, 96, WIDTH, HEIGHT, CHROMA)
+        self.f_walking_front.append(pygame.transform.scale2x(image))
+        image = sprite_sheet.get_image(96, 128, WIDTH, HEIGHT, CHROMA)
+        self.f_walking_front.append(pygame.transform.scale2x(image))
 
         self.image = self.f_idle_front[0]
         self.frame = 0
@@ -98,15 +145,40 @@ class Player(pygame.sprite.Sprite):
             if self.rect.y + self.change_y > 0:
                 self.rect.y += self.change_y
 
-        if self.frame + 1 < len(self.f_idle_front):
-            if self.count == 4:
-                self.frame += 1
-                self.count = 0
+        # Deal with drawing the right sprite per direction.
+        if self.direction == "IF":
+            if self.frame + 1 < len(self.f_idle_front):
+                if self.count == 4:
+                    self.frame += 1
+                    self.count = 0
+                else:
+                    self.count += 1
             else:
-                self.count += 1
+                self.frame = 0
+            self.image = self.f_idle_front[self.frame]
+        elif self.direction == "IB":
+            if self.frame + 1 < len(self.f_idle_back):
+                if self.count == 4:
+                    self.frame += 1
+                    self.count = 0
+                else:
+                    self.count += 1
+            else:
+                self.frame = 0
+            self.image = self.f_idle_back[self.frame]
+        elif self.direction == "WF":
+            if self.frame + 1 < len(self.f_walking_front):
+                if self.count >= 2:
+                    self.frame += 1
+                    self.count = 0
+                else:
+                    self.count += 1
+            else:
+                self.frame = 0
+            self.image = self.f_walking_front[self.frame]
+
         else:
-            self.frame = 0
-        self.image = self.f_idle_front[self.frame]
+            self.image = self.f_idle_front[0]
 
     def move_right(self):
         """ Moves the player right by adding the speed to the x position. """
@@ -116,13 +188,23 @@ class Player(pygame.sprite.Sprite):
         """ Moves the player left by subtracting the speed to the x position. """
         self.change_x = -1. * self.speed
 
-    def move_up(self):
-        """ Moves the player up by adding the speed to the y position. """
-        self.change_y = -1. * self.speed
-
-    def move_down(self):
-        """ Moves the player down by subtracting the speed to the y position. """
-        self.change_y = self.speed
+    def move_updown(self, magnitude):
+        """ Moves the player up or down by changing the magnitude of change_y. 
+            magnitude = 0: don't move up/down
+            magnitude = 1: change y in the down direction (positive)
+            magnitude = -1: change y in the up direction (negative)
+        """
+        if self.change_y > 0 and magnitude == 0:
+            # we were moving down before, now we're not. we need to show idle front.
+            self.direction = "IF"
+        elif self.change_y < 0 and magnitude == 0:
+            # we were moving up before, now we're not. we need to show idle back.
+            self.direction = "IB"
+        elif magnitude == 1:
+            self.direction = "WF"
+        else:
+            self.direction = "IF"
+        self.change_y = magnitude * 1.0 * self.speed
 
     def no_move(self, direction):
         """ Player stops moving.
@@ -312,7 +394,7 @@ class App:
         Deals with rendering things on screen.
         """
 
-        self._display_surf.fill((0, 0, 0))
+        self._display_surf.fill((128, 128, 128))
         self.active_sprites.draw(self._display_surf)
         score_render = self._font_score.render(str(self.coin_count), False, (255, 255, 255))
         self._display_surf.blit(score_render, (700, 10))
@@ -361,15 +443,15 @@ class App:
                     if event.key in left:
                         self.player.move_left()
                     if event.key in up:
-                        self.player.move_up()
+                        self.player.move_updown(-1)
                     if event.key in down:
-                        self.player.move_down()
+                        self.player.move_updown(1)
 
                 if event.type == pygame.KEYUP:
                     if event.key in left or event.key in right:
                         self.player.no_move(0)
                     if event.key in up or event.key in down:
-                        self.player.no_move(1)
+                        self.player.move_updown(0)
 
             self.active_sprites.update()
             self.on_loop()
