@@ -253,16 +253,6 @@ class Player(pygame.sprite.Sprite):
             self.direction = "IF"
         self.change_y = magnitude * 1.0 * self.speed
 
-    def no_move(self, direction):
-        """ Player stops moving.
-            direction == 0: x direction (left, right)
-            direction == 1: y direction (up, down)
-            """
-        if direction == 0:
-            self.change_x = 0
-        else:
-            self.change_y = 0
-
 
 class Padraicula:
     """
