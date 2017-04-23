@@ -86,13 +86,17 @@ class Player(pygame.sprite.Sprite):
         self.frame = 0
         self.count = 0
         self.rect = self.image.get_rect()
+        self.rect.x = 10
+        self.rect.y = 10
 
     def update(self):
         """ Updates the current position of the rectangle on screen. """
-        if (self.rect.x + WIDTH * 2 + self.change_x) < THEAPP.windowWidth and (self.rect.x + self.change_x) > 0:
-            self.rect.x += self.change_x
-        if (self.rect.y + HEIGHT * 2 + self.change_y) < THEAPP.windowHeight and (self.rect.y + self.change_y) > 0:
-            self.rect.y += self.change_y
+        if self.rect.x + WIDTH * 2 + self.change_x < THEAPP.windowWidth:
+            if self.rect.x + self.change_x > 0:
+                self.rect.x += self.change_x
+        if self.rect.y + HEIGHT * 2 + self.change_y < THEAPP.windowHeight:
+            if self.rect.y + self.change_y > 0:
+                self.rect.y += self.change_y
 
         if self.frame + 1 < len(self.f_idle_front):
             if self.count == 4:
@@ -229,8 +233,6 @@ class App:
         self.coin = Coin(5, 5)
         self.coin_count = 0
         self.spawned = False
-        self.player.rect.x = 10
-        self.player.rect.y = 10
         self.active_sprites.add(self.player)
 
     def on_init(self):
@@ -311,7 +313,6 @@ class App:
         """
 
         self._display_surf.fill((0, 0, 0))
-        #self._display_surf.blit(self._player_surf, (self.player.x, self.player.y))
         self.active_sprites.draw(self._display_surf)
         score_render = self._font_score.render(str(self.coin_count), False, (255, 255, 255))
         self._display_surf.blit(score_render, (700, 10))
