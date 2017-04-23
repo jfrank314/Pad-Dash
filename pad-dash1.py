@@ -120,10 +120,15 @@ class Player(pygame.sprite.Sprite):
         """ Moves the player down by subtracting the speed to the y position. """
         self.change_y = self.speed
 
-    def no_move(self):
-        """ Player stops moving. """
-        self.change_x = 0
-        self.change_y = 0
+    def no_move(self, direction):
+        """ Player stops moving.
+            direction == 0: x direction (left, right)
+            direction == 1: y direction (up, down)
+            """
+        if direction == 0:
+            self.change_x = 0
+        else:
+            self.change_y = 0
 
 
 class Padraicula:
@@ -339,30 +344,33 @@ class App:
             self._running = False
 
         while self._running:
-            pygame.event.pump()
-            keys = pygame.key.get_pressed()
-
-            if (keys[K_RIGHT] or keys[K_d]):
-                self.player.move_right()
-
-            if (keys[K_LEFT] or keys[K_a]):
-                self.player.move_left()
-
-            if (keys[K_UP] or keys[K_w]):
-                self.player.move_up()
-
-            if (keys[K_DOWN] or keys[K_s]):
-                self.player.move_down()
-
-            if not (keys[K_RIGHT] or keys[K_LEFT] or keys[K_UP] or keys[K_DOWN] or keys[K_d] or keys[K_a] or keys[K_w] or keys[K_s]):
-                self.player.no_move()
-
-            if keys[K_ESCAPE]:
-                self._running = False
-
+            # pygame.event.pump()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self._running = False
+
+                right = (pygame.K_RIGHT, pygame.K_d)
+                left = (pygame.K_LEFT, pygame.K_a)
+                up = (pygame.K_UP, pygame.K_w)
+                down = (pygame.K_DOWN, pygame.K_d)
+
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        self._running = False
+                    if event.key in right:
+                        self.player.move_right()
+                    if event.key in left:
+                        self.player.move_left()
+                    if event.key in up:
+                        self.player.move_up()
+                    if event.key in down:
+                        self.player.move_down()
+
+                if event.type == pygame.KEYUP:
+                    if event.key in left or event.key in right:
+                        self.player.no_move(0)
+                    if event.key in up or event.key in down:
+                        self.player.no_move(1)
 
             self.active_sprites.update()
             self.on_loop()
