@@ -140,7 +140,7 @@ class Padraicula:
 
     x = 801
     y = 601
-    speed = 0.5
+    speed = 1
 
     def move_right(self):
         """ Moves the player right by adding the speed to the x position. """
