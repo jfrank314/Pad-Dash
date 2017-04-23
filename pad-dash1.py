@@ -210,8 +210,8 @@ class App:
     Deals with the game itself.
     """
 
-    windowWidth = 800
-    windowHeight = 600
+    windowWidth = 1600
+    windowHeight = 900
     player = 0
     coin = 0
     pad = []
