@@ -13,6 +13,21 @@ HEIGHT = 32
 SCALING = 4
 CHROMA = (0, 255, 0)
 
+class SpriteHelper:
+    """ We need a better way of addressing sprite locations.
+        Create a loop to make a 7x8 lookup table. """
+    def __init__(self):
+        self.table = []
+        for y in range(8):
+            row = []
+            for x in range(7):
+                row.append((x * 32, y * 32))
+            table.append(row)
+
+    def lookup(self, x, y):
+        return self.table[x][y][0], self.table[x][y][1]
+
+
 class Coin(pygame.sprite.Sprite):
     """ Deals with the variables for items that the player must pick up in order to progress.
 
