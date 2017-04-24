@@ -299,6 +299,7 @@ class Padraicula(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
         self.mask = pygame.mask.from_surface(self.image)
+        self.currently_dabbing = False
 
     def update(self):
         """ Updates the current position of the rectangle on screen. """
@@ -311,9 +312,23 @@ class Padraicula(pygame.sprite.Sprite):
                 self.rect.y += self.change_y
 
         # Deal with drawing the right sprite per direction.
-        if self.direction == "WF":
+
+        # Secret dab animation.
+        if randint(1, 1000) == 1000 and self.direction == "WF":
+            self.currently_dabbing = True
+            self.image = self.f_dab_front[0]
+
+        if self.currently_dabbing == True:
+            self.image = self.f_dab_front[0]
+            if self.count == 15:
+                self.count = 0
+                self.direction = "WF"
+                self.currently_dabbing = False
+            else:
+                self.count += 1
+        elif self.direction == "WF":
             if self.frame + 1 < len(self.f_walking_front):
-                if self.count == 6:
+                if self.count == 9:
                     self.frame += 1
                     self.count = 0
                 else:
@@ -323,7 +338,7 @@ class Padraicula(pygame.sprite.Sprite):
             self.image = self.f_walking_front[self.frame]
         elif self.direction == "WB":
             if self.frame + 1 < len(self.f_walking_back):
-                if self.count == 6:
+                if self.count == 9:
                     self.frame += 1
                     self.count = 0
                 else:
