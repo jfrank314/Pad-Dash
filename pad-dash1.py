@@ -604,7 +604,6 @@ class App:
             self.on_render()
             self._clock.tick(60)
             pygame.display.set_caption('Pad-Dash | FPS: {0:.2f}'.format(self._clock.get_fps()))
-            pygame.display.flip()
 
         self.on_cleanup()
 
