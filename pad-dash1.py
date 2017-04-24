@@ -10,6 +10,7 @@ from spritesheet_functions import SpriteSheet
 
 WIDTH = 32
 HEIGHT = 32
+SCALING = 4
 CHROMA = (0, 255, 0)
 
 class Coin(pygame.sprite.Sprite):
@@ -33,7 +34,7 @@ class Coin(pygame.sprite.Sprite):
 
         sprite_sheet = SpriteSheet(os.path.join("assets", "sprites.png"))
         image = sprite_sheet.get_image(0, 32, WIDTH, HEIGHT, CHROMA)
-        self.f_coin.append(pygame.transform.scale2x(pygame.transform.scale2x(image)))
+        self.f_coin.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
 
         self.image = self.f_coin[0]
         self.frame = 0
@@ -77,95 +78,95 @@ class Player(pygame.sprite.Sprite):
 
         # First, idle front animation.
         image = sprite_sheet.get_image(32, 32, WIDTH, HEIGHT, CHROMA)
-        self.f_idle_front.append(pygame.transform.scale2x(pygame.transform.scale2x(image)))
+        self.f_idle_front.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
         image = sprite_sheet.get_image(64, 32, WIDTH, HEIGHT, CHROMA)
-        self.f_idle_front.append(pygame.transform.scale2x(pygame.transform.scale2x(image)))
+        self.f_idle_front.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
         image = sprite_sheet.get_image(96, 32, WIDTH, HEIGHT, CHROMA)
-        self.f_idle_front.append(pygame.transform.scale2x(pygame.transform.scale2x(image)))
+        self.f_idle_front.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
         image = sprite_sheet.get_image(128, 32, WIDTH, HEIGHT, CHROMA)
-        self.f_idle_front.append(pygame.transform.scale2x(pygame.transform.scale2x(image)))
+        self.f_idle_front.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
         image = sprite_sheet.get_image(160, 32, WIDTH, HEIGHT, CHROMA)
-        self.f_idle_front.append(pygame.transform.scale2x(pygame.transform.scale2x(image)))
+        self.f_idle_front.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
         image = sprite_sheet.get_image(192, 32, WIDTH, HEIGHT, CHROMA)
-        self.f_idle_front.append(pygame.transform.scale2x(pygame.transform.scale2x(image)))
+        self.f_idle_front.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
         image = sprite_sheet.get_image(0, 64, WIDTH, HEIGHT, CHROMA)
-        self.f_idle_front.append(pygame.transform.scale2x(pygame.transform.scale2x(image)))
+        self.f_idle_front.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
 
         # Next, idle back animation.
         image = sprite_sheet.get_image(128, 128, WIDTH, HEIGHT, CHROMA)
-        self.f_idle_back.append(pygame.transform.scale2x(pygame.transform.scale2x(image)))
+        self.f_idle_back.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
         image = sprite_sheet.get_image(160, 128, WIDTH, HEIGHT, CHROMA)
-        self.f_idle_back.append(pygame.transform.scale2x(pygame.transform.scale2x(image)))
+        self.f_idle_back.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
         image = sprite_sheet.get_image(192, 128, WIDTH, HEIGHT, CHROMA)
-        self.f_idle_back.append(pygame.transform.scale2x(pygame.transform.scale2x(image)))
+        self.f_idle_back.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
         image = sprite_sheet.get_image(0, 160, WIDTH, HEIGHT, CHROMA)
-        self.f_idle_back.append(pygame.transform.scale2x(pygame.transform.scale2x(image)))
+        self.f_idle_back.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
         image = sprite_sheet.get_image(32, 160, WIDTH, HEIGHT, CHROMA)
-        self.f_idle_back.append(pygame.transform.scale2x(pygame.transform.scale2x(image)))
+        self.f_idle_back.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
         image = sprite_sheet.get_image(64, 160, WIDTH, HEIGHT, CHROMA)
-        self.f_idle_back.append(pygame.transform.scale2x(pygame.transform.scale2x(image)))
+        self.f_idle_back.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
         image = sprite_sheet.get_image(96, 160, WIDTH, HEIGHT, CHROMA)
-        self.f_idle_back.append(pygame.transform.scale2x(pygame.transform.scale2x(image)))
+        self.f_idle_back.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
 
         # Next, walking front animation.
         image = sprite_sheet.get_image(32, 64, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_front.append(pygame.transform.scale2x(pygame.transform.scale2x(image)))
+        self.f_walking_front.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
         image = sprite_sheet.get_image(32, 96, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_front.append(pygame.transform.scale2x(pygame.transform.scale2x(image)))
+        self.f_walking_front.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
         image = sprite_sheet.get_image(64, 64, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_front.append(pygame.transform.scale2x(pygame.transform.scale2x(image)))
+        self.f_walking_front.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
         image = sprite_sheet.get_image(64, 96, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_front.append(pygame.transform.scale2x(pygame.transform.scale2x(image)))
+        self.f_walking_front.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
         image = sprite_sheet.get_image(96, 64, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_front.append(pygame.transform.scale2x(pygame.transform.scale2x(image)))
+        self.f_walking_front.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
         image = sprite_sheet.get_image(96, 96, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_front.append(pygame.transform.scale2x(pygame.transform.scale2x(image)))
+        self.f_walking_front.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
         image = sprite_sheet.get_image(128, 64, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_front.append(pygame.transform.scale2x(pygame.transform.scale2x(image)))
+        self.f_walking_front.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
         image = sprite_sheet.get_image(128, 96, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_front.append(pygame.transform.scale2x(pygame.transform.scale2x(image)))
+        self.f_walking_front.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
         image = sprite_sheet.get_image(160, 64, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_front.append(pygame.transform.scale2x(pygame.transform.scale2x(image)))
+        self.f_walking_front.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
         image = sprite_sheet.get_image(160, 96, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_front.append(pygame.transform.scale2x(pygame.transform.scale2x(image)))
+        self.f_walking_front.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
         image = sprite_sheet.get_image(192, 64, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_front.append(pygame.transform.scale2x(pygame.transform.scale2x(image)))
+        self.f_walking_front.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
         image = sprite_sheet.get_image(192, 96, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_front.append(pygame.transform.scale2x(pygame.transform.scale2x(image)))
+        self.f_walking_front.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
         image = sprite_sheet.get_image(0, 96, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_front.append(pygame.transform.scale2x(pygame.transform.scale2x(image)))
+        self.f_walking_front.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
         image = sprite_sheet.get_image(96, 128, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_front.append(pygame.transform.scale2x(pygame.transform.scale2x(image)))
+        self.f_walking_front.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
 
         # Next, walking back animation.
         image = sprite_sheet.get_image(128, 160, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_back.append(pygame.transform.scale2x(pygame.transform.scale2x(image)))
+        self.f_walking_back.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
         image = sprite_sheet.get_image(128, 192, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_back.append(pygame.transform.scale2x(pygame.transform.scale2x(image)))
+        self.f_walking_back.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
         image = sprite_sheet.get_image(160, 160, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_back.append(pygame.transform.scale2x(pygame.transform.scale2x(image)))
+        self.f_walking_back.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
         image = sprite_sheet.get_image(160, 192, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_back.append(pygame.transform.scale2x(pygame.transform.scale2x(image)))
+        self.f_walking_back.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
         image = sprite_sheet.get_image(192, 160, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_back.append(pygame.transform.scale2x(pygame.transform.scale2x(image)))
+        self.f_walking_back.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
         image = sprite_sheet.get_image(192, 192, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_back.append(pygame.transform.scale2x(pygame.transform.scale2x(image)))
+        self.f_walking_back.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
         image = sprite_sheet.get_image(0, 192, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_back.append(pygame.transform.scale2x(pygame.transform.scale2x(image)))
+        self.f_walking_back.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
         image = sprite_sheet.get_image(0, 224, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_back.append(pygame.transform.scale2x(pygame.transform.scale2x(image)))
+        self.f_walking_back.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
         image = sprite_sheet.get_image(32, 192, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_back.append(pygame.transform.scale2x(pygame.transform.scale2x(image)))
+        self.f_walking_back.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
         image = sprite_sheet.get_image(32, 224, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_back.append(pygame.transform.scale2x(pygame.transform.scale2x(image)))
+        self.f_walking_back.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
         image = sprite_sheet.get_image(64, 192, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_back.append(pygame.transform.scale2x(pygame.transform.scale2x(image)))
+        self.f_walking_back.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
         image = sprite_sheet.get_image(64, 224, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_back.append(pygame.transform.scale2x(pygame.transform.scale2x(image)))
+        self.f_walking_back.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
         image = sprite_sheet.get_image(96, 192, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_back.append(pygame.transform.scale2x(pygame.transform.scale2x(image)))
+        self.f_walking_back.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
         image = sprite_sheet.get_image(96, 224, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_back.append(pygame.transform.scale2x(pygame.transform.scale2x(image)))
+        self.f_walking_back.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
 
         self.image = self.f_idle_front[0]
         self.frame = 0
@@ -176,10 +177,10 @@ class Player(pygame.sprite.Sprite):
 
     def update(self):
         """ Updates the current position of the rectangle on screen. """
-        if self.rect.x + WIDTH * 4 + self.change_x < THEAPP.windowWidth:
+        if self.rect.x + WIDTH * SCALING + self.change_x < THEAPP.windowWidth:
             if self.rect.x + self.change_x > 0:
                 self.rect.x += self.change_x
-        if self.rect.y + HEIGHT * 4 + self.change_y < THEAPP.windowHeight:
+        if self.rect.y + HEIGHT * SCALING + self.change_y < THEAPP.windowHeight:
             if self.rect.y + self.change_y > 0:
                 self.rect.y += self.change_y
 
