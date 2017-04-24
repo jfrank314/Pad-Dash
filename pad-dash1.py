@@ -487,8 +487,7 @@ class App:
         Deals with conditions that need to be checked every iteration of the game.
         """
 
-        if self.game.is_collision(self.coin, self.player):
-            # Deals with coin and player collision.
+        if pygame.sprite.spritecollide(self.player, self.pickup_sprites, False, pygame.sprite.collide_mask):
             self.coin_count += 1
 
             """ Instead of having it spawn in a random spot, we'll split it to the four
@@ -555,7 +554,7 @@ class App:
             elif pad.rect.y == self.player.rect.y:
                 pad.move_updown(0)
 
-            if self.game.is_collision(pad, self.player):
+            if pygame.sprite.spritecollide(self.player, self.enemy_sprites, False, pygame.sprite.collide_mask):
                 self._running = False
 
     def on_render(self):
