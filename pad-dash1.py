@@ -12,25 +12,39 @@ WIDTH = 32
 HEIGHT = 32
 CHROMA = (0, 255, 0)
 
-class Coin:
+class Coin(pygame.sprite.Sprite):
     """
     Deals with the variables for items that the player must pick up in order to progress.
 
     Has an x, y, and step for postioning of the coin, and how much the coin should be moved.
+    
+    Also, initializes the coin to be a sprite based off of the sprite passed through.
     """
 
-    x = 0
-    y = 0
-    step = 44
-
     def __init__(self, x, y):
-        self.x = x * self.step
-        self.y = y * self.step
+        """ In order to make a coin, you need to have a constructor. """
 
-    def draw(self, surface, image):
-        """ Takes in an image to draw on the surface at a specified position. """
-        surface.blit(image, (self.x, self.y))
+        # Call upon the sprite's constructor.
+        super().__init__()
 
+        # Need to have the frame(s) for the coin.
+
+        self.f_coin = []
+
+        sprite_sheet = SpriteSheet(os.path.join("assets", "sprites.png"))
+        image = sprite_sheet.get_image(0, 32, WIDTH, HEIGHT, CHROMA)
+        self.f_coin.append(pygame.transform.scale2x(pygame.transform.scale2x(image)))
+
+        self.image = self.f_coin[0]
+        self.frame = 0
+        self.count = 0
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+    def update(self):
+        """ Update the current position of the coin on the screen. """
+        self.image = self.f_coin[0]
 
 class Player(pygame.sprite.Sprite):
     """
@@ -266,19 +280,19 @@ class Padraicula:
     speed = 1
 
     def move_right(self):
-        """ Moves the player right by adding the speed to the x position. """
+        """ Moves the Padraicula right by adding the speed to the x position. """
         self.x += self.speed
 
     def move_left(self):
-        """ Moves the player left by subtracting the speed to the x position. """
+        """ Moves the Padraicula left by subtracting the speed to the x position. """
         self.x -= self.speed
 
     def move_up(self):
-        """ Moves the player up by adding the speed to the y position. """
+        """ Moves the Padraicula up by adding the speed to the y position. """
         self.y -= self.speed
 
     def move_down(self):
-        """ Moves the player down by subtracting the speed to the y position. """
+        """ Moves the Padraicula down by subtracting the speed to the y position. """
         self.y += self.speed
 
 
@@ -290,20 +304,20 @@ class Game:
     def is_collision(self, object_1, object_2, pad_col=None):
         """ Checks whether or not two objects have collided. """
 
-        if isinstance(object_1, Coin):
-            size1 = 26
-        else:
+        if isinstance(object_1, Padraicula):
             size1 = 52
-
-        if isinstance(object_2, Coin):
-            size2 = 26
         else:
-            size2 = 52
+            size1 = WIDTH * 4
 
-        x1 = object_1.x if not isinstance(object_1, Player) else object_1.rect.x
-        y1 = object_1.y if not isinstance(object_1, Player) else object_1.rect.y
-        x2 = object_2.x if not isinstance(object_2, Player) else object_2.rect.x
-        y2 = object_2.y if not isinstance(object_2, Player) else object_2.rect.y
+        if isinstance(object_2, Padraicula):
+            size2 = 52
+        else:
+            size2 = WIDTH * 4
+
+        x1 = object_1.x if isinstance(object_1, Padraicula) else object_1.rect.x
+        y1 = object_1.y if isinstance(object_1, Padraicula) else object_1.rect.y
+        x2 = object_2.x if isinstance(object_2, Padraicula) else object_2.rect.x
+        y2 = object_2.y if isinstance(object_2, Padraicula) else object_2.rect.y
 
         optional_direction = pad_col
 
@@ -335,24 +349,23 @@ class App:
 
     windowWidth = 1600
     windowHeight = 900
-    player = 0
-    coin = 0
     pad = []
 
     def __init__(self):
         self._running = True
         self._display_surf = pygame.display.set_mode((self.windowWidth, self.windowHeight), pygame.HWSURFACE)
-        self._coin_surf = None
         self._pad_surf = None
         self._font_score = None
         self._clock = None
         self.active_sprites = pygame.sprite.Group()
         self.game = Game()
         self.player = Player()
-        self.coin = Coin(5, 5)
+        self.coin = Coin(randint(10, 300), randint(10, 300))
         self.coin_count = 0
         self.spawned = False
         self.active_sprites.add(self.player)
+        self.active_sprites.add(self.coin)
+
 
     def on_init(self):
         """
@@ -366,7 +379,6 @@ class App:
         pygame.display.set_caption('Pad-Dash')
         self._clock = pygame.time.Clock()
         self._running = True
-        self._coin_surf = pygame.image.load(os.path.join("assets", "test_coin_img.png")).convert()
         self._pad_surf = pygame.image.load(os.path.join("assets", "test_padraicula_img.png")).convert()
         self._font_score = pygame.font.SysFont("monospace", 64)
 
@@ -428,8 +440,8 @@ class App:
             if randint(0, 2) == 2:
                 coin_quadrant = player_quadrant
 
-            self.coin.x = quadrants[coin_quadrant][0] + randint(1, 6) * 64
-            self.coin.y = quadrants[coin_quadrant][1] + randint(1, 6) * 64
+            self.coin.rect.x = quadrants[coin_quadrant][0] + randint(1, 6) * 64
+            self.coin.rect.y = quadrants[coin_quadrant][1] + randint(1, 6) * 64
 
         if self.coin_count % 2 == 0:
             # Deals with Padraicula spawning.
@@ -470,7 +482,6 @@ class App:
         self.active_sprites.draw(self._display_surf)
         score_render = self._font_score.render(str(self.coin_count), False, (255, 255, 255))
         self._display_surf.blit(score_render, (700, 10))
-        self.coin.draw(self._display_surf, self._coin_surf)
 
         if not self.pad:
             pass
