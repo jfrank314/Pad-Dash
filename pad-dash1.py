@@ -510,8 +510,8 @@ class App:
             if randint(0, 2) == 2:
                 coin_quadrant = player_quadrant
 
-            self.coin.rect.x = quadrants[coin_quadrant][0] + randint(1, 6) * 64
-            self.coin.rect.y = quadrants[coin_quadrant][1] + randint(1, 6) * 64
+            self.coin.rect.x = quadrants[coin_quadrant][0] + randint(1, 5) * 64
+            self.coin.rect.y = quadrants[coin_quadrant][1] + randint(1, 5) * 64
 
         if self.coin_count % 2 == 0:
             # Deals with Padraicula spawning.
