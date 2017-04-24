@@ -29,8 +29,10 @@ class Coin(pygame.sprite.Sprite):
         super().__init__()
 
         # Need to have the frame(s) for the coin.
-
         self.f_coin = []
+
+        # Need to check if things collide (use sprites!)
+        self.mask = None
 
         sprite_sheet = SpriteSheet(os.path.join("assets", "sprites.png"))
         image = sprite_sheet.get_image(0, 32, WIDTH, HEIGHT, CHROMA)
@@ -42,10 +44,12 @@ class Coin(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+        self.mask = pygame.mask.from_surface(self.image)
 
     def update(self):
         """ Update the current position of the coin on the screen. """
         self.image = self.f_coin[0]
+        self.mask = pygame.mask.from_surface(self.image)
 
 class Player(pygame.sprite.Sprite):
     """
@@ -73,6 +77,9 @@ class Player(pygame.sprite.Sprite):
         self.f_idle_back = []
         self.f_walking_front = []
         self.f_walking_back = []
+
+        # Need this to check if things collide.
+        self.mask = None
 
         sprite_sheet = SpriteSheet(os.path.join("assets", "sprites.png"))
 
@@ -174,6 +181,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = 10
         self.rect.y = 10
+        self.mask = pygame.mask.from_surface(self.image)
 
     def update(self):
         """ Updates the current position of the rectangle on screen. """
@@ -227,6 +235,7 @@ class Player(pygame.sprite.Sprite):
             self.image = self.f_walking_back[self.frame]
         else:
             self.image = self.f_idle_front[0]
+        self.mask = pygame.mask.from_surface(self.image)
 
     def move_rightleft(self, magnitude):
         """ Moves the player right or left by changing the magnitude of change_x.
@@ -293,6 +302,9 @@ class Padraicula(pygame.sprite.Sprite):
         self.f_walking_front = []
         self.f_walking_back = []
 
+        # Need to check if things collide (use sprites!)
+        self.mask = None
+
         sprite_sheet = SpriteSheet(os.path.join("assets", "sprites.png"))
 
         # Walking front animation.
@@ -321,6 +333,7 @@ class Padraicula(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+        self.mask = pygame.mask.from_surface(self.image)
 
     def update(self):
         """ Updates the current position of the rectangle on screen. """
@@ -354,6 +367,7 @@ class Padraicula(pygame.sprite.Sprite):
             self.image = self.f_walking_back[self.frame]
         else:
             self.image = self.f_walking_front[0]
+        self.mask = pygame.mask.from_surface(self.image)
 
     def move_rightleft(self, magnitude):
         """ Moves the Padraicula right or left by changing the magnitude of change_x.
