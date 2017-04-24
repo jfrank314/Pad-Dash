@@ -269,32 +269,111 @@ class Player(pygame.sprite.Sprite):
         self.change_y = magnitude * 1.0 * self.speed
 
 
-class Padraicula:
+class Padraicula(pygame.sprite.Sprite):
     """
     Deals with the variables for the enemies players must avoid, including positioning and movement.
 
     Has an x, y, & speed for initial positioning of the character (off screen), and their movement.
+
+    Also, initializes the enemy to be a sprite based off of the sprite passed through.
     """
 
-    x = 801
-    y = 601
-    speed = 1
+    def __init__(self, x, y):
+        """ Constructing an enemy! """
 
-    def move_right(self):
-        """ Moves the Padraicula right by adding the speed to the x position. """
-        self.x += self.speed
+        # Using the parent (sprite) constructor.
+        super().__init__()
 
-    def move_left(self):
-        """ Moves the Padraicula left by subtracting the speed to the x position. """
-        self.x -= self.speed
+        self.change_x = 0
+        self.change_y = 0
+        self.speed = 1
+        self.direction = "WF"
 
-    def move_up(self):
-        """ Moves the Padraicula up by adding the speed to the y position. """
-        self.y -= self.speed
+        # We have 2 sets of animations: walking forward, walking back.
+        self.f_walking_front = []
+        self.f_walking_back = []
 
-    def move_down(self):
-        """ Moves the Padraicula down by subtracting the speed to the y position. """
-        self.y += self.speed
+        sprite_sheet = SpriteSheet(os.path.join("assets", "sprites.png"))
+
+        # Walking front animation.
+        image = sprite_shet.get_image(0, 0, WIDTH, HEIGHT, CHROMA)
+        self.f_walking_front.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
+        image = sprite_shet.get_image(32, 0, WIDTH, HEIGHT, CHROMA)
+        self.f_walking_front.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
+        image = sprite_shet.get_image(0, 0, WIDTH, HEIGHT, CHROMA)
+        self.f_walking_front.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
+        image = sprite_shet.get_image(64, 0, WIDTH, HEIGHT, CHROMA)
+        self.f_walking_front.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
+
+        # Walking back animation.
+        image = sprite_sheet.get_image(96, 0, WIDTH, HEIGHT, CHROMA)
+        self.f_walking_back.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
+        image = sprite_sheet.get_image(128, 0, WIDTH, HEIGHT, CHROMA)
+        self.f_walking_back.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
+        image = sprite_sheet.get_image(96, 0, WIDTH, HEIGHT, CHROMA)
+        self.f_walking_back.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
+        image = sprite_sheet.get_image(160, 0, WIDTH, HEIGHT, CHROMA)
+        self.f_walking_back.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
+
+        self.image = self.f_walking_front[0]
+        self.frame = 0
+        self.count = 0
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+    def update(self):
+        """ Updates the current position of the rectangle on screen. """
+        if self.rect.x + WIDTH * SCALING + self.change_x < THEAPP.windowWidth:
+            if self.rect.x + self.change_x > 0:
+                self.rect.x += self.change_x
+        if self.rect.y + HEIGHT * SCALING + self.change_y < THEAPP.windowHeight:
+            if self.rect.y + self.change_y > 0:
+                self.rect.y += self.change_y
+
+        # Deal with drawing the right sprite per direction.
+        if self.direction == "WF":
+            if self.frame + 1 < len(self.f_walking_front):
+                if self.count == 6:
+                    self.frame += 1
+                    self.count = 0
+                else:
+                    self.count += 1
+            else:
+                self.frame = 0
+            self.image = self.f_walking_front[self.frame]
+        elif self.direction == "WB":
+            if self.frame + 1 < len(self.f_walking_back):
+                if self.count == 6:
+                    self.frame += 1
+                    self.count = 0
+                else:
+                    self.count += 1
+            else:
+                self.frame = 0
+            self.image = self.f_walking_back[self.frame]
+        else:
+            self.image = self.f_walking_front[0]
+
+    def move_rightleft(self, magnitude):
+        """ Moves the Padraicula right or left by changing the magnitude of change_x.
+            magnitude = 0: don't move up/down
+            magnitude = 1: change x in the right direction (positive)
+            magnitude = -1: change x in the left direction (negative)
+        """
+        self.change_x = magnitude * 1.0 * self.speed
+
+    def move_updown(self, magnitude):
+        """ Moves the player up or down by changing the magnitude of change_y.
+            magnitude = 0: don't move up/down
+            magnitude = 1: change y in the down direction (positive)
+            magnitude = -1: change y in the up direction (negative)
+        """
+        if magnitude == 1:
+            self.direction = "WF"
+        else:
+            self.direction = "WB"
+        self.change_y = magnitude * 1.0 * self.speed
 
 
 class Game:
@@ -355,7 +434,6 @@ class App:
     def __init__(self):
         self._running = True
         self._display_surf = pygame.display.set_mode((self.windowWidth, self.windowHeight), pygame.HWSURFACE)
-        self._pad_surf = None
         self._font_score = None
         self._clock = None
         self.active_sprites = pygame.sprite.Group()
@@ -366,7 +444,6 @@ class App:
         self.spawned = False
         self.active_sprites.add(self.player)
         self.active_sprites.add(self.coin)
-
 
     def on_init(self):
         """
@@ -380,7 +457,6 @@ class App:
         pygame.display.set_caption('Pad-Dash')
         self._clock = pygame.time.Clock()
         self._running = True
-        self._pad_surf = pygame.image.load(os.path.join("assets", "test_padraicula_img.png")).convert()
         self._font_score = pygame.font.SysFont("monospace", 64)
 
         pygame.mixer.init()
@@ -447,7 +523,9 @@ class App:
         if self.coin_count % 2 == 0:
             # Deals with Padraicula spawning.
             if self.coin_count > 0 and not self.spawned:
-                self.pad.append(Padraicula())
+                enemy = Padraicula(1400, 700)
+                self.pad.append(enemy)
+                self.active_sprites.add(enemy)
                 self.spawned = True
         else:
             if self.spawned:
@@ -462,14 +540,14 @@ class App:
                         pass
 
                     if pad.x > self.player.rect.x and (not self.game.is_collision(pad, other_pads, pad_col="L") or len(self.pad) == 1):
-                        pad.move_left()
+                        pad.move_rightleft(1)
                     elif pad.x < self.player.rect.x and (not self.game.is_collision(pad, other_pads, pad_col="R") or len(self.pad) == 1):
-                        pad.move_right()
+                        pad.move_rightleft(-1)
 
                     if pad.y > self.player.rect.y and (not self.game.is_collision(pad, other_pads, pad_col="U") or len(self.pad) == 1):
-                        pad.move_up()
+                        pad.move_updown(-1)
                     elif pad.y < self.player.rect.y and (not self.game.is_collision(pad, other_pads, pad_col="D") or len(self.pad) == 1):
-                        pad.move_down()
+                        pad.move_updown(1)
 
                 if self.game.is_collision(pad, self.player):
                     self._running = False
@@ -483,12 +561,6 @@ class App:
         self.active_sprites.draw(self._display_surf)
         score_render = self._font_score.render(str(self.coin_count), False, (255, 255, 255))
         self._display_surf.blit(score_render, (700, 10))
-
-        if not self.pad:
-            pass
-        else:
-            for i in self.pad:
-                self._display_surf.blit(self._pad_surf, (i.x, i.y))
 
         pygame.display.flip()
 
