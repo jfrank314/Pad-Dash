@@ -225,10 +225,10 @@ class Player(pygame.sprite.Sprite):
     def update(self):
         """ Updates the current position of the rectangle on screen. """
 
-        if self.rect.x + WIDTH * SCALING + self.change_x < THEAPP.windowWidth:
+        if self.rect.x + WIDTH * SCALING + self.change_x < PADDASH.windowWidth:
             if self.rect.x + self.change_x > 0:
                 self.rect.x += self.change_x
-        if self.rect.y + HEIGHT * SCALING + self.change_y < THEAPP.windowHeight:
+        if self.rect.y + HEIGHT * SCALING + self.change_y < PADDASH.windowHeight:
             if self.rect.y + self.change_y > 0:
                 self.rect.y += self.change_y
 
@@ -385,10 +385,10 @@ class Padraicula(pygame.sprite.Sprite):
     def update(self):
         """ Updates the current position of the rectangle on screen. """
 
-        if self.rect.x + WIDTH * SCALING + self.change_x < THEAPP.windowWidth:
+        if self.rect.x + WIDTH * SCALING + self.change_x < PADDASH.windowWidth:
             if self.rect.x + self.change_x > 0:
                 self.rect.x += self.change_x
-        if self.rect.y + HEIGHT * SCALING + self.change_y < THEAPP.windowHeight:
+        if self.rect.y + HEIGHT * SCALING + self.change_y < PADDASH.windowHeight:
             if self.rect.y + self.change_y > 0:
                 self.rect.y += self.change_y
 
@@ -526,7 +526,7 @@ class App:
             self.coin.rect.x = quadrants[coin_quadrant][0] + \
                 randint(1, (self.windowWidth // 2) // x_scaling - 1) * x_scaling
             self.coin.rect.y = quadrants[coin_quadrant][1] + \
-                randint(1, (self.windowHeight // 2) // y_scaling - 1) * y_scaling
+                randint(1, (self.windowHeight // 2) // y_scaling - 2) * y_scaling
 
         if self.coin_count % 2 == 0:
             # Deals with Padraicula spawning.
