@@ -16,17 +16,14 @@ CHROMA = (0, 255, 0)
 class SpriteHelper:
     """ We need a better way of addressing sprite locations.
         Create a loop to make a 7x8 lookup table. """
+
     def __init__(self):
-        self.table = []
-        for y in range(8):
-            row = []
-            for x in range(7):
-                row.append((x * 32, y * 32))
-            table.append(row)
+        self.matrix = [[(x * 32, y * 32) for x in range(7)] for y in range(8)]
 
-    def lookup(self, x, y):
-        return self.table[x][y][0], self.table[x][y][1]
-
+    def lookup(self, coords):
+        x = coords[0]
+        y = coords[1]
+        return self.matrix[y][x][0], self.matrix[y][x][1]
 
 class Coin(pygame.sprite.Sprite):
     """ Deals with the variables for items that the player must pick up in order to progress.
@@ -48,8 +45,11 @@ class Coin(pygame.sprite.Sprite):
         self.mask = None
 
         sprite_sheet = SpriteSheet(os.path.join("assets", "sprites.png"))
-        image = sprite_sheet.get_image(0, 32, WIDTH, HEIGHT, CHROMA)
-        self.f_coin.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
+        lookup_table = [(0, 1)]
+        for value in lookup_table:
+            pixel_x, pixel_y = SPRITEHELPER.lookup(value)
+            image = sprite_sheet.get_image(pixel_x, pixel_y, WIDTH, HEIGHT, CHROMA)
+            self.f_coin.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
 
         self.image = self.f_coin[0]
         self.rect = self.image.get_rect()
@@ -93,139 +93,39 @@ class Player(pygame.sprite.Sprite):
 
         sprite_sheet = SpriteSheet(os.path.join("assets", "sprites.png"))
 
-        # First, idle front animation.
-        image = sprite_sheet.get_image(32, 32, WIDTH, HEIGHT, CHROMA)
-        self.f_idle_front.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_sheet.get_image(64, 32, WIDTH, HEIGHT, CHROMA)
-        self.f_idle_front.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_sheet.get_image(96, 32, WIDTH, HEIGHT, CHROMA)
-        self.f_idle_front.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_sheet.get_image(128, 32, WIDTH, HEIGHT, CHROMA)
-        self.f_idle_front.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_sheet.get_image(160, 32, WIDTH, HEIGHT, CHROMA)
-        self.f_idle_front.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_sheet.get_image(192, 32, WIDTH, HEIGHT, CHROMA)
-        self.f_idle_front.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_sheet.get_image(0, 64, WIDTH, HEIGHT, CHROMA)
-        self.f_idle_front.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
+        lookup_table = [(1, 1), (2, 1), (3, 1), (4, 1), (5, 1), (6, 1), (0, 2)]
 
-        # Next, idle back animation.
-        image = sprite_sheet.get_image(128, 128, WIDTH, HEIGHT, CHROMA)
-        self.f_idle_back.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_sheet.get_image(160, 128, WIDTH, HEIGHT, CHROMA)
-        self.f_idle_back.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_sheet.get_image(192, 128, WIDTH, HEIGHT, CHROMA)
-        self.f_idle_back.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_sheet.get_image(0, 160, WIDTH, HEIGHT, CHROMA)
-        self.f_idle_back.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_sheet.get_image(32, 160, WIDTH, HEIGHT, CHROMA)
-        self.f_idle_back.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_sheet.get_image(64, 160, WIDTH, HEIGHT, CHROMA)
-        self.f_idle_back.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_sheet.get_image(96, 160, WIDTH, HEIGHT, CHROMA)
-        self.f_idle_back.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
+        for value in lookup_table:
+            pixel_x, pixel_y = SPRITEHELPER.lookup(value)
+            image = sprite_sheet.get_image(pixel_x, pixel_y, WIDTH, HEIGHT, CHROMA)
+            self.f_idle_front.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
 
-        # Next, walking front animation.
-        image = sprite_sheet.get_image(32, 64, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_front.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_sheet.get_image(32, 96, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_front.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_sheet.get_image(64, 64, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_front.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_sheet.get_image(64, 96, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_front.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_sheet.get_image(96, 64, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_front.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_sheet.get_image(96, 96, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_front.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_sheet.get_image(128, 64, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_front.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_sheet.get_image(128, 96, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_front.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_sheet.get_image(160, 64, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_front.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_sheet.get_image(160, 96, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_front.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_sheet.get_image(192, 64, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_front.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_sheet.get_image(192, 96, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_front.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_sheet.get_image(0, 96, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_front.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_sheet.get_image(96, 128, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_front.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
+        lookup_table = [(4, 4), (5, 4), (6, 4), (0, 5), (1, 5), (2, 5), (3, 5)]
 
-        # Next, walking back animation.
-        image = sprite_sheet.get_image(128, 160, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_back.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_sheet.get_image(128, 192, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_back.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_sheet.get_image(160, 160, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_back.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_sheet.get_image(160, 192, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_back.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_sheet.get_image(192, 160, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_back.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_sheet.get_image(192, 192, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_back.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_sheet.get_image(0, 192, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_back.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_sheet.get_image(0, 224, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_back.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_sheet.get_image(32, 192, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_back.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_sheet.get_image(32, 224, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_back.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_sheet.get_image(64, 192, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_back.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_sheet.get_image(64, 224, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_back.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_sheet.get_image(96, 192, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_back.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_sheet.get_image(96, 224, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_back.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
+        for value in lookup_table:
+            pixel_x, pixel_y = SPRITEHELPER.lookup(value)
+            image = sprite_sheet.get_image(pixel_x, pixel_y, WIDTH, HEIGHT, CHROMA)
+            self.f_idle_back.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
+
+        lookup_table = [(1, 1), (1, 2), (1, 1), (1, 3), (2, 1), (2, 2), (2, 1), (2, 3), \
+                        (3, 1), (3, 2), (3, 1), (3, 3), (4, 1), (4, 2), (4, 1), (4, 3), \
+                        (5, 1), (5, 2), (5, 1), (5, 3), (6, 1), (6, 2), (6, 1), (6, 3), \
+                        (0, 2), (0, 3), (0, 2)]
+
+        for value in lookup_table:
+            pixel_x, pixel_y = SPRITEHELPER.lookup(value)
+            image = sprite_sheet.get_image(pixel_x, pixel_y, WIDTH, HEIGHT, CHROMA)
+            self.f_walking_front.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
+
+        lookup_table = [(4, 4), (4, 5), (4, 4), (4, 6), (5, 4), (5, 5), (5, 4), (5, 6), \
+                        (6, 4), (6, 5), (6, 4), (6, 6), (0, 5), (0, 6), (0, 5), (0, 7), \
+                        (1, 5), (1, 6), (1, 5), (1, 7), (2, 5), (2, 6), (2, 5), (2, 7), \
+                        (3, 5), (3, 6), (3, 5), (3, 7)]
+
+        for value in lookup_table:
+            pixel_x, pixel_y = SPRITEHELPER.lookup(value)
+            image = sprite_sheet.get_image(pixel_x, pixel_y, WIDTH, HEIGHT, CHROMA)
+            self.f_walking_back.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
 
         self.image = self.f_idle_front[0]
         self.frame = 0
@@ -248,7 +148,7 @@ class Player(pygame.sprite.Sprite):
         # Deal with drawing the right sprite per direction.
         if self.direction == "IF":
             if self.frame + 1 < len(self.f_idle_front):
-                if self.count == 6:
+                if self.count == 11:
                     self.frame += 1
                     self.count = 0
                 else:
@@ -258,7 +158,7 @@ class Player(pygame.sprite.Sprite):
             self.image = self.f_idle_front[self.frame]
         elif self.direction == "IB":
             if self.frame + 1 < len(self.f_idle_back):
-                if self.count == 6:
+                if self.count == 11:
                     self.frame += 1
                     self.count = 0
                 else:
@@ -296,16 +196,24 @@ class Player(pygame.sprite.Sprite):
             magnitude = 1: change x in the right direction (positive)
             magnitude = -1: change x in the left direction (negative) """
 
-        if self.change_x > 0 and magnitude == 0:
-            # we were moving right before, now we're not. we need to show idle front.
+        if self.change_y > 0 and magnitude == 0:
             self.direction = "IF"
-        elif self.change_x < 0 and magnitude == 0:
-            # we were moving left before, now we're not. we need to show idle front.
-            self.direction = "IF"
+        elif self.change_y < 0 and magnitude == 0:
+            self.direction = "IB"
         elif magnitude == 1:
-            self.direction = "WF"
+            if self.change_y > 0:
+                self.direction = "WF"
+            elif self.change_y < 0:
+                self.direction = "WB"
+            else:
+                self.direction = "WF"
         elif magnitude == -1:
-            self.direction = "WF"
+            if self.change_y == 0:
+                self.direction = "WF"
+            elif self.change_y < 0:
+                self.direction = "WB"
+            else:
+                self.direction = "WF"
         else:
             self.direction = "IF"
         self.change_x = magnitude * 1.0 * self.speed
@@ -350,42 +258,39 @@ class Padraicula(pygame.sprite.Sprite):
         self.speed = speed
         self.direction = "WF"
 
-        # We have 2 sets of animations: walking forward, walking back.
+        # We have 3 sets of animations: walking forward, walking back, dabbing front.
         self.f_walking_front = []
         self.f_walking_back = []
+        self.f_dab_front = []
 
         # Need to check if things collide (use sprites!)
         self.mask = None
 
         sprite_sheet = SpriteSheet(os.path.join("assets", "sprites.png"))
 
-        # Walking front animation.
-        image = sprite_sheet.get_image(0, 0, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_front.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_sheet.get_image(32, 0, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_front.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_sheet.get_image(0, 0, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_front.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_sheet.get_image(64, 0, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_front.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
+        lookup_table = [(0, 0), (1, 0), (0, 0), (2, 0)]
 
-        # Walking back animation.
-        image = sprite_sheet.get_image(96, 0, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_back.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_sheet.get_image(128, 0, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_back.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_sheet.get_image(96, 0, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_back.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_sheet.get_image(160, 0, WIDTH, HEIGHT, CHROMA)
-        self.f_walking_back.append(pygame.transform.scale(image, \
-            (WIDTH * SCALING, HEIGHT * SCALING)))
+        for value in lookup_table:
+            pixel_x, pixel_y = SPRITEHELPER.lookup(value)
+            image = sprite_sheet.get_image(pixel_x, pixel_y, WIDTH, HEIGHT, CHROMA)
+            self.f_walking_front.append(pygame.transform.scale(image, \
+                (WIDTH * SCALING, HEIGHT * SCALING)))
+
+        lookup_table = [(3, 0), (4, 0), (3, 0), (5, 0)]
+
+        for value in lookup_table:
+            pixel_x, pixel_y = SPRITEHELPER.lookup(value)
+            image = sprite_sheet.get_image(pixel_x, pixel_y, WIDTH, HEIGHT, CHROMA)
+            self.f_walking_back.append(pygame.transform.scale(image, \
+                (WIDTH * SCALING, HEIGHT * SCALING)))
+
+        lookup_table = [(6, 0)]
+
+        for value in lookup_table:
+            pixel_x, pixel_y = SPRITEHELPER.lookup(value)
+            image = sprite_sheet.get_image(pixel_x, pixel_y, WIDTH, HEIGHT, CHROMA)
+            self.f_dab_front.append(pygame.transform.scale(image, \
+                (WIDTH * SCALING, HEIGHT * SCALING)))
 
         self.image = self.f_walking_front[0]
         self.frame = 0
@@ -628,5 +533,6 @@ class App:
 
 
 if __name__ == "__main__":
+    SPRITEHELPER = SpriteHelper()
     PADDASH = App()
     PADDASH.on_execute()
