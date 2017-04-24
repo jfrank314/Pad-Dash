@@ -14,13 +14,11 @@ SCALING = 4
 CHROMA = (0, 255, 0)
 
 class Coin(pygame.sprite.Sprite):
-    """
-    Deals with the variables for items that the player must pick up in order to progress.
+    """ Deals with the variables for items that the player must pick up in order to progress.
 
     Has an x, y, and step for postioning of the coin, and how much the coin should be moved.
 
-    Also, initializes the coin to be a sprite based off of the sprite passed through.
-    """
+    Also, initializes the coin to be a sprite based off of the sprite passed through. """
 
     def __init__(self, x, y):
         """ In order to make a coin, you need to have a constructor. """
@@ -48,17 +46,16 @@ class Coin(pygame.sprite.Sprite):
 
     def update(self):
         """ Update the current position of the coin on the screen. """
+
         self.image = self.f_coin[0]
         self.mask = pygame.mask.from_surface(self.image)
 
 class Player(pygame.sprite.Sprite):
-    """
-    Deals with the variables for player information: positioning, and how fast they can move.
+    """ Deals with the variables for player information: positioning, and how fast they can move.
 
     Has an x, y, and speed for initial positioning of the player, and how fast they can move.
 
-    Also, initializes the player to be a sprite based off of the sprite passed through.
-    """
+    Also, initializes the player to be a sprite based off of the sprite passed through."""
 
     def __init__(self):
         """ Constructing the player... """
@@ -227,6 +224,7 @@ class Player(pygame.sprite.Sprite):
 
     def update(self):
         """ Updates the current position of the rectangle on screen. """
+
         if self.rect.x + WIDTH * SCALING + self.change_x < THEAPP.windowWidth:
             if self.rect.x + self.change_x > 0:
                 self.rect.x += self.change_x
@@ -283,8 +281,8 @@ class Player(pygame.sprite.Sprite):
         """ Moves the player right or left by changing the magnitude of change_x.
             magnitude = 0: don't move up/down
             magnitude = 1: change x in the right direction (positive)
-            magnitude = -1: change x in the left direction (negative)
-        """
+            magnitude = -1: change x in the left direction (negative) """
+
         if self.change_x > 0 and magnitude == 0:
             # we were moving right before, now we're not. we need to show idle front.
             self.direction = "IF"
@@ -303,8 +301,8 @@ class Player(pygame.sprite.Sprite):
         """ Moves the player up or down by changing the magnitude of change_y.
             magnitude = 0: don't move up/down
             magnitude = 1: change y in the down direction (positive)
-            magnitude = -1: change y in the up direction (negative)
-        """
+            magnitude = -1: change y in the up direction (negative) """
+
         if self.change_y > 0 and magnitude == 0:
             # we were moving down before, now we're not. we need to show idle front.
             self.direction = "IF"
@@ -321,18 +319,17 @@ class Player(pygame.sprite.Sprite):
 
 
 class Padraicula(pygame.sprite.Sprite):
-    """
-    Deals with the variables for the enemies players must avoid, including positioning and movement.
+    """ Deals with the variables for the enemies, including positioning and movement.
 
     Has an x, y, & speed for initial positioning of the character (off screen), and their movement.
 
-    Also, initializes the enemy to be a sprite based off of the sprite passed through.
-    """
+    Also, initializes the enemy to be a sprite based off of the sprite passed through. """
 
     def __init__(self, x, y):
         """ Constructing an enemy! """
 
         # Using the parent (sprite) constructor.
+
         super().__init__()
 
         self.change_x = 0
@@ -387,6 +384,7 @@ class Padraicula(pygame.sprite.Sprite):
 
     def update(self):
         """ Updates the current position of the rectangle on screen. """
+
         if self.rect.x + WIDTH * SCALING + self.change_x < THEAPP.windowWidth:
             if self.rect.x + self.change_x > 0:
                 self.rect.x += self.change_x
@@ -423,16 +421,16 @@ class Padraicula(pygame.sprite.Sprite):
         """ Moves the Padraicula right or left by changing the magnitude of change_x.
             magnitude = 0: don't move up/down
             magnitude = 1: change x in the right direction (positive)
-            magnitude = -1: change x in the left direction (negative)
-        """
+            magnitude = -1: change x in the left direction (negative) """
+
         self.change_x = magnitude * 1.0 * self.speed
 
     def move_updown(self, magnitude):
-        """ Moves the player up or down by changing the magnitude of change_y.
+        """ Moves the Padraicula up or down by changing the magnitude of change_y.
             magnitude = 0: don't move up/down
             magnitude = 1: change y in the down direction (positive)
-            magnitude = -1: change y in the up direction (negative)
-        """
+            magnitude = -1: change y in the up direction (negative) """
+
         if magnitude == -1:
             self.direction = "WB"
         else:
@@ -441,9 +439,7 @@ class Padraicula(pygame.sprite.Sprite):
 
 
 class App:
-    """
-    Deals with the game itself.
-    """
+    """ Deals with the game itself. """
 
     windowWidth = 1600
     windowHeight = 900
@@ -465,12 +461,10 @@ class App:
         self.pickup_sprites.add(self.coin)
 
     def on_init(self):
-        """
-        On initialization, we have to set a few constants for our game to run.
+        """ On initialization, we have to set a few constants for our game to run.
 
         This starts up the pygame instance, sets a few constants and its rendering type, and the
-        images used for the game itself. This also loads and sets the music.
-        """
+        images used for the game itself. This also loads and sets the music. """
 
         pygame.init()
         pygame.display.set_caption('Pad-Dash')
@@ -483,28 +477,20 @@ class App:
         pygame.mixer.music.play(-1)
         pygame.mixer.music.set_volume(0.2)
 
-    def on_event(self, event):
-        """
-        Handles the events passed through to the game itself.
-
-        Right now, we're checking if any of the events match QUIT; hitting escape to quit the game.
-        """
-
-        if event.type == QUIT:
-            self._running = False
-
     def on_loop(self):
-        """
-        Deals with conditions that need to be checked every iteration of the game.
-        """
+        """ Deals with conditions that need to be checked every iteration of the game. """
 
-        if pygame.sprite.spritecollide(self.player, self.pickup_sprites, False, pygame.sprite.collide_mask):
+        if pygame.sprite.spritecollide(self.player, self.pickup_sprites, \
+            False, pygame.sprite.collide_mask):
+            """ Deal with player touching any sprites which are pickups.
+                This can be extended to just more than coins. """
+
             self.coin_count += 1
 
             """ Instead of having it spawn in a random spot, we'll split it to the four
                 quadrants that the game provides, and we try to spawn one in a different
-                quadrant.
-            """
+                quadrant. """
+
             quadrants = [(0, 0), (self.windowWidth / 2, 0), \
                 (self.windowHeight / 2, 0), (self.windowHeight / 2, self.windowHeight / 2)]
 
@@ -572,9 +558,7 @@ class App:
                 self._running = False
 
     def on_render(self):
-        """
-        Deals with rendering things on screen.
-        """
+        """ Deals with rendering things on screen. """
 
         self._display_surf.fill((128, 128, 128))
         self.player_sprites.draw(self._display_surf)
@@ -582,27 +566,16 @@ class App:
         self.enemy_sprites.draw(self._display_surf)
         score_render = self._font_score.render(str(self.coin_count), False, (255, 255, 255))
         self._display_surf.blit(score_render, (700, 10))
-
         pygame.display.flip()
 
-    def on_cleanup(self):
-        """
-        Cleans up any unnecessary variables at the end of the game.
-        """
-
-        pygame.quit()
-
     def on_execute(self):
-        """
-        The function which runs the main game loop. Calls other functions
-        to check or not to continue looping and rendering what is on screen.
-        """
+        """ The function which runs the main game loop. Calls other functions
+            to check or not to continue looping and rendering what is on screen. """
 
         if self.on_init() is False:
             self._running = False
 
         while self._running:
-            # pygame.event.pump()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self._running = False
@@ -638,9 +611,9 @@ class App:
             self._clock.tick(60)
             pygame.display.set_caption('Pad-Dash | FPS: {0:.2f}'.format(self._clock.get_fps()))
 
-        self.on_cleanup()
+        pygame.quit()
 
 
 if __name__ == "__main__":
-    THEAPP = App()
-    THEAPP.on_execute()
+    PADDASH = App()
+    PADDASH.on_execute()
