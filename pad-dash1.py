@@ -18,7 +18,7 @@ class Coin(pygame.sprite.Sprite):
     Deals with the variables for items that the player must pick up in order to progress.
 
     Has an x, y, and step for postioning of the coin, and how much the coin should be moved.
-    
+
     Also, initializes the coin to be a sprite based off of the sprite passed through.
     """
 
