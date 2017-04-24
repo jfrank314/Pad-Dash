@@ -323,7 +323,7 @@ class Padraicula(pygame.sprite.Sprite):
 
     Also, initializes the enemy to be a sprite based off of the sprite passed through. """
 
-    def __init__(self, x, y):
+    def __init__(self, x, y, speed=1):
         """ Constructing an enemy! """
 
         # Using the parent (sprite) constructor.
@@ -332,7 +332,7 @@ class Padraicula(pygame.sprite.Sprite):
 
         self.change_x = 0
         self.change_y = 0
-        self.speed = 1
+        self.speed = speed
         self.direction = "WF"
 
         # We have 2 sets of animations: walking forward, walking back.
