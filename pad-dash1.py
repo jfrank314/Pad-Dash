@@ -533,9 +533,9 @@ class App:
                         pass
 
                     if pad.rect.x > self.player.rect.x and (not self.game.is_collision(pad, other_pads, pad_col="L") or len(self.pad) == 1):
-                        pad.move_rightleft(1)
-                    elif pad.rect.x < self.player.rect.x and (not self.game.is_collision(pad, other_pads, pad_col="R") or len(self.pad) == 1):
                         pad.move_rightleft(-1)
+                    elif pad.rect.x < self.player.rect.x and (not self.game.is_collision(pad, other_pads, pad_col="R") or len(self.pad) == 1):
+                        pad.move_rightleft(1)
 
                     if pad.rect.y > self.player.rect.y and (not self.game.is_collision(pad, other_pads, pad_col="U") or len(self.pad) == 1):
                         pad.move_updown(-1)
