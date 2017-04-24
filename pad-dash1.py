@@ -390,45 +390,6 @@ class Padraicula(pygame.sprite.Sprite):
         self.change_y = magnitude * 1.0 * self.speed
 
 
-class Game:
-    """
-    Contains methods that are related to elements within the game state.
-    """
-
-    def is_collision(self, object_1, object_2, pad_col=None):
-        """ Checks whether or not two objects have collided. """
-
-        size1 = WIDTH * 4
-        size2 = WIDTH * 4
-
-        x1 = object_1.rect.x
-        y1 = object_1.rect.y
-        x2 = object_2.rect.x
-        y2 = object_2.rect.y
-
-        optional_direction = pad_col
-
-        if optional_direction == "L":
-            x1 -= 1
-        elif optional_direction == "R":
-            x1 += 1
-        elif optional_direction == "U":
-            y1 -= 1
-        elif optional_direction == "D":
-            y1 += 1
-        else:
-            pass
-
-        if x1 >= x2 and x1 <= x2 + size2:
-            if y1 >= y2 and y1 <= y2 + size2:
-                return True
-
-        if x1 + size1 >= x2 and x1 <= x2 + size2:
-            if y1 + size1 >= y2 and y1 <= y2 + size2:
-                return True
-        return False
-
-
 class App:
     """
     Deals with the game itself.
@@ -445,7 +406,6 @@ class App:
         self.player_sprites = pygame.sprite.Group()
         self.pickup_sprites = pygame.sprite.Group()
         self.enemy_sprites = pygame.sprite.Group()
-        self.game = Game()
         self.player = Player()
         self.coin = Coin(randint(10, 300), randint(10, 300))
         self.coin_count = 0
