@@ -242,7 +242,7 @@ class Player(pygame.sprite.Sprite):
         elif magnitude == 1:
             self.direction = "WF"
         elif magnitude == -1:
-            self.direction = "WB"
+            self.direction = "WF"
         else:
             self.direction = "IF"
         self.change_x = magnitude * 1.0 * self.speed
