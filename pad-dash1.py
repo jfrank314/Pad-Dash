@@ -296,13 +296,13 @@ class Padraicula(pygame.sprite.Sprite):
         sprite_sheet = SpriteSheet(os.path.join("assets", "sprites.png"))
 
         # Walking front animation.
-        image = sprite_shet.get_image(0, 0, WIDTH, HEIGHT, CHROMA)
+        image = sprite_sheet.get_image(0, 0, WIDTH, HEIGHT, CHROMA)
         self.f_walking_front.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_shet.get_image(32, 0, WIDTH, HEIGHT, CHROMA)
+        image = sprite_sheet.get_image(32, 0, WIDTH, HEIGHT, CHROMA)
         self.f_walking_front.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_shet.get_image(0, 0, WIDTH, HEIGHT, CHROMA)
+        image = sprite_sheet.get_image(0, 0, WIDTH, HEIGHT, CHROMA)
         self.f_walking_front.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
-        image = sprite_shet.get_image(64, 0, WIDTH, HEIGHT, CHROMA)
+        image = sprite_sheet.get_image(64, 0, WIDTH, HEIGHT, CHROMA)
         self.f_walking_front.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
 
         # Walking back animation.
