@@ -428,15 +428,16 @@ class App:
         self._display_surf = pygame.display.set_mode((self.windowWidth, self.windowHeight), pygame.HWSURFACE)
         self._font_score = None
         self._clock = None
-        self.active_sprites = pygame.sprite.Group()
+        self.player_sprites = pygame.sprite.Group()
+        self.pickup_sprites = pygame.sprite.Group()
         self.enemy_sprites = pygame.sprite.Group()
         self.game = Game()
         self.player = Player()
         self.coin = Coin(randint(10, 300), randint(10, 300))
         self.coin_count = 0
         self.spawned = False
-        self.active_sprites.add(self.player)
-        self.active_sprites.add(self.coin)
+        self.player_sprites.add(self.player)
+        self.pickup_sprites.add(self.coin)
 
     def on_init(self):
         """
@@ -549,7 +550,8 @@ class App:
         """
 
         self._display_surf.fill((128, 128, 128))
-        self.active_sprites.draw(self._display_surf)
+        self.player_sprites.draw(self._display_surf)
+        self.pickup_sprites.draw(self._display_surf)
         self.enemy_sprites.draw(self._display_surf)
         score_render = self._font_score.render(str(self.coin_count), False, (255, 255, 255))
         self._display_surf.blit(score_render, (700, 10))
@@ -601,7 +603,8 @@ class App:
                     if event.key in up or event.key in down:
                         self.player.move_updown(0)
 
-            self.active_sprites.update()
+            self.player_sprites.update()
+            self.pickup_sprites.update()
             self.enemy_sprites.update()
             self.on_loop()
             self.on_render()
