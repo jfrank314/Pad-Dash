@@ -37,8 +37,6 @@ class Coin(pygame.sprite.Sprite):
         self.f_coin.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
 
         self.image = self.f_coin[0]
-        self.frame = 0
-        self.count = 0
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
