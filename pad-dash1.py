@@ -369,10 +369,10 @@ class Padraicula(pygame.sprite.Sprite):
             magnitude = 1: change y in the down direction (positive)
             magnitude = -1: change y in the up direction (negative)
         """
-        if magnitude == 1:
-            self.direction = "WF"
-        else:
+        if magnitude == -1:
             self.direction = "WB"
+        else:
+            self.direction = "WF"
         self.change_y = magnitude * 1.0 * self.speed
 
 
@@ -524,26 +524,23 @@ class App:
             if self.spawned:
                 self.spawned = False
 
-        if not self.pad:
-            pass
-        else:
-            for pad in self.pad:
-                for other_pads in self.pad:
-                    if other_pads == pad and len(self.pad) > 1:
-                        pass
+        for pad in self.pad:
+            if pad.rect.x > self.player.rect.x:
+                pad.move_rightleft(-1)
+            elif pad.rect.x < self.player.rect.x:
+                pad.move_rightleft(1)
+            elif pad.rect.x == self.player.rect.x:
+                pad.move_rightleft(0)
 
-                    if pad.rect.x > self.player.rect.x and (not self.game.is_collision(pad, other_pads, pad_col="L") or len(self.pad) == 1):
-                        pad.move_rightleft(-1)
-                    elif pad.rect.x < self.player.rect.x and (not self.game.is_collision(pad, other_pads, pad_col="R") or len(self.pad) == 1):
-                        pad.move_rightleft(1)
+            if pad.rect.y > self.player.rect.y:
+                pad.move_updown(-1)
+            elif pad.rect.y < self.player.rect.y:
+                pad.move_updown(1)
+            elif pad.rect.y == self.player.rect.y:
+                pad.move_updown(0)
 
-                    if pad.rect.y > self.player.rect.y and (not self.game.is_collision(pad, other_pads, pad_col="U") or len(self.pad) == 1):
-                        pad.move_updown(-1)
-                    elif pad.rect.y < self.player.rect.y and (not self.game.is_collision(pad, other_pads, pad_col="D") or len(self.pad) == 1):
-                        pad.move_updown(1)
-
-                if self.game.is_collision(pad, self.player):
-                    self._running = False
+            if self.game.is_collision(pad, self.player):
+                self._running = False
 
     def on_render(self):
         """
