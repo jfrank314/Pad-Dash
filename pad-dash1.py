@@ -422,7 +422,6 @@ class App:
 
     windowWidth = 1600
     windowHeight = 900
-    pad = []
 
     def __init__(self):
         self._running = True
@@ -430,6 +429,7 @@ class App:
         self._font_score = None
         self._clock = None
         self.active_sprites = pygame.sprite.Group()
+        self.enemy_sprites = pygame.sprite.Group()
         self.game = Game()
         self.player = Player()
         self.coin = Coin(randint(10, 300), randint(10, 300))
@@ -519,14 +519,13 @@ class App:
             # Deals with Padraicula spawning.
             if self.coin_count > 0 and not self.spawned:
                 enemy = Padraicula(1400, 700)
-                self.pad.append(enemy)
-                self.active_sprites.add(enemy)
+                self.enemy_sprites.add(enemy)
                 self.spawned = True
         else:
             if self.spawned:
                 self.spawned = False
 
-        for pad in self.pad:
+        for pad in self.enemy_sprites:
             if pad.rect.x > self.player.rect.x:
                 pad.move_rightleft(-1)
             elif pad.rect.x < self.player.rect.x:
@@ -551,6 +550,7 @@ class App:
 
         self._display_surf.fill((128, 128, 128))
         self.active_sprites.draw(self._display_surf)
+        self.enemy_sprites.draw(self._display_surf)
         score_render = self._font_score.render(str(self.coin_count), False, (255, 255, 255))
         self._display_surf.blit(score_render, (700, 10))
 
@@ -602,6 +602,7 @@ class App:
                         self.player.move_updown(0)
 
             self.active_sprites.update()
+            self.enemy_sprites.update()
             self.on_loop()
             self.on_render()
             self._clock.tick(60)
