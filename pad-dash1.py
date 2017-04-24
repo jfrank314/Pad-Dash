@@ -384,20 +384,13 @@ class Game:
     def is_collision(self, object_1, object_2, pad_col=None):
         """ Checks whether or not two objects have collided. """
 
-        if isinstance(object_1, Padraicula):
-            size1 = 52
-        else:
-            size1 = WIDTH * 4
+        size1 = WIDTH * 4
+        size2 = WIDTH * 4
 
-        if isinstance(object_2, Padraicula):
-            size2 = 52
-        else:
-            size2 = WIDTH * 4
-
-        x1 = object_1.x if isinstance(object_1, Padraicula) else object_1.rect.x
-        y1 = object_1.y if isinstance(object_1, Padraicula) else object_1.rect.y
-        x2 = object_2.x if isinstance(object_2, Padraicula) else object_2.rect.x
-        y2 = object_2.y if isinstance(object_2, Padraicula) else object_2.rect.y
+        x1 = object_1.rect.x
+        y1 = object_1.rect.y
+        x2 = object_2.rect.x
+        y2 = object_2.rect.y
 
         optional_direction = pad_col
 
