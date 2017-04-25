@@ -409,7 +409,6 @@ class App:
         self.pickup_sprites = pygame.sprite.Group()
         self.enemy_sprites = pygame.sprite.Group()
         self.player = Player()
-        self.coin = Coin(randint(10, 300), randint(10, 300))
         self.coin_count = 0
         self.spawned = False
         self.player_sprites.add(self.player)
