@@ -400,7 +400,6 @@ class App:
             pygame.HWSURFACE)
         self._font_score = None
         self._clock = None
-        self.gameDisplay = pygame.display.set_mode((self.windowWidth,self.windowHeight))
         self.player_sprites = pygame.sprite.Group()
         self.pickup_sprites = pygame.sprite.Group()
         self.enemy_sprites = pygame.sprite.Group()
@@ -573,7 +572,6 @@ class App:
                 self._intro = False
 
             pygame.display.update()
-            self._clock.tick(15)
 
         while self._running:
             for event in pygame.event.get():
