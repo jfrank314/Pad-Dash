@@ -99,14 +99,16 @@ class Player(pygame.sprite.Sprite):
         for value in lookup_table:
             pixel_x, pixel_y = SPRITEHELPER.lookup(value)
             image = sprite_sheet.get_image(pixel_x, pixel_y, WIDTH, HEIGHT, CHROMA)
-            self.f_idle_front.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
+            self.f_idle_front.append(pygame.transform.scale(image, \
+                (WIDTH * SCALING, HEIGHT * SCALING)))
 
         lookup_table = [(4, 4), (5, 4), (6, 4), (0, 5), (1, 5), (2, 5), (3, 5)]
 
         for value in lookup_table:
             pixel_x, pixel_y = SPRITEHELPER.lookup(value)
             image = sprite_sheet.get_image(pixel_x, pixel_y, WIDTH, HEIGHT, CHROMA)
-            self.f_idle_back.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
+            self.f_idle_back.append(pygame.transform.scale(image, \
+                (WIDTH * SCALING, HEIGHT * SCALING)))
 
         lookup_table = [(1, 1), (1, 2), (1, 1), (1, 3), (2, 1), (2, 2), (2, 1), (2, 3), \
                         (3, 1), (3, 2), (3, 1), (3, 3), (4, 1), (4, 2), (4, 1), (4, 3), \
@@ -116,7 +118,8 @@ class Player(pygame.sprite.Sprite):
         for value in lookup_table:
             pixel_x, pixel_y = SPRITEHELPER.lookup(value)
             image = sprite_sheet.get_image(pixel_x, pixel_y, WIDTH, HEIGHT, CHROMA)
-            self.f_walking_front.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
+            self.f_walking_front.append(pygame.transform.scale(image, \
+                (WIDTH * SCALING, HEIGHT * SCALING)))
 
         lookup_table = [(4, 4), (4, 5), (4, 4), (4, 6), (5, 4), (5, 5), (5, 4), (5, 6), \
                         (6, 4), (6, 5), (6, 4), (6, 6), (0, 5), (0, 6), (0, 5), (0, 7), \
@@ -126,7 +129,8 @@ class Player(pygame.sprite.Sprite):
         for value in lookup_table:
             pixel_x, pixel_y = SPRITEHELPER.lookup(value)
             image = sprite_sheet.get_image(pixel_x, pixel_y, WIDTH, HEIGHT, CHROMA)
-            self.f_walking_back.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
+            self.f_walking_back.append(pygame.transform.scale(image, \
+                (WIDTH * SCALING, HEIGHT * SCALING)))
 
         self.image = self.f_idle_front[0]
         self.frame = 0
@@ -387,7 +391,7 @@ class App:
     windowHeight = 900
     darkred = (112, 16, 16)
     lightred = (160, 22, 22)
-    black = (0,0,0)
+    black = (0, 0, 0)
 
     def __init__(self):
         self._intro = True
@@ -513,29 +517,32 @@ class App:
         self.pickup_sprites.draw(self._display_surf)
         self.enemy_sprites.draw(self._display_surf)
         score_render = self._font_score.render(str(self.coin_count), False, (255, 255, 255))
-        self._display_surf.blit(score_render, (700, 10))
+        self._display_surf.blit(score_render, (PADDASH.windowWidth // 2 - 64, 10))
         pygame.display.flip()
 
-    def text_objects(self,text, font, color):
-        textSurface = font.render(text, True, color)
-        return textSurface, textSurface.get_rect()
+    def text_objects(self, text, font, input_color):
+        """ Takes in text, a font, and the color you want, and produces a text surface. """
+        text_surface = font.render(text, True, input_color)
+        return text_surface, text_surface.get_rect()
 
-    def button(self,msg,x,y,w,h,ic,ac):
+    def button(self, msg, x, y, w, h, ic, ac):
+        """ Creates a button which returns true if click is triggered. Otherwise,
+            stays where it's placed. """
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
 
         if x + w > mouse[0] > x and y + h > mouse[1] > y:
-            pygame.draw.rect(self.gameDisplay, ac,(x,y,w,h))
+            pygame.draw.rect(self._display_surf, ac, (x, y, w, h))
 
             if click[0] == 1:
                 return True
         else:
-            pygame.draw.rect(self.gameDisplay, ic, (x,y,w,h))
+            pygame.draw.rect(self._display_surf, ic, (x, y, w, h))
 
-        smallText = pygame.font.Font('chiller.ttf',50)
-        textSurf, textRect = self.text_objects(msg,smallText, self.black)
-        textRect.center = ((x + (w/2)), (y + (h/2)))
-        self.gameDisplay.blit(textSurf, textRect)
+        small_text = pygame.font.Font('chiller.ttf', 50)
+        text_surf, text_rect = self.text_objects(msg, small_text, self.black)
+        text_rect.center = ((x + (w / 2)), (y + (h / 2)))
+        self._display_surf.blit(text_surf, text_rect)
 
     def on_execute(self):
         """ The function which runs the main game loop. Calls other functions
@@ -548,18 +555,20 @@ class App:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
-                    quit()
-            self.gameDisplay.fill(self.black)
-            largeText = pygame.font.Font('Chiller.ttf',115)
-            TextSurf, TextRect = self.text_objects("Pad-Dash", largeText, self.darkred)
-            TextRect.center = ((self.windowWidth/2), (self.windowHeight/3))
-            self.gameDisplay.blit(TextSurf, TextRect)
 
-            if self.button("Begin", (self.windowWidth/2 - 105), (self.windowHeight/2 + 35), 210, 70, self.darkred, self.lightred):
+            self._display_surf.fill(self.black)
+            large_text = pygame.font.Font('Chiller.ttf', 115)
+            text_surf, text_rect = self.text_objects("Pad-Dash", large_text, self.darkred)
+            text_rect.center = ((self.windowWidth / 2), (self.windowHeight / 3))
+            self._display_surf.blit(text_surf, text_rect)
+
+            if self.button("Begin", (self.windowWidth/2 - 105), (self.windowHeight/2 + 35), \
+                210, 70, self.darkred, self.lightred):
                 self._running = True
                 self._intro = False
 
-            if self.button("Quit", (self.windowWidth/2 - 105), (2* (self.windowHeight/3) + 35), 210, 70, self.darkred, self.lightred):
+            if self.button("Quit", (self.windowWidth/2 - 105), (2* (self.windowHeight/3) + 35), \
+                210, 70, self.darkred, self.lightred):
                 self._running = False
                 self._intro = False
 
