@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+"""#!/usr/bin/env python"""
 
 """ We dashin' now. """
 
@@ -384,13 +384,18 @@ class App:
 
     windowWidth = 1600
     windowHeight = 900
+    darkred = (112, 16, 16)
+    lightred = (160, 22, 22)
+    black = (0,0,0)
 
     def __init__(self):
+        self._intro = True
         self._running = True
         self._display_surf = pygame.display.set_mode((self.windowWidth, self.windowHeight), \
             pygame.HWSURFACE)
         self._font_score = None
         self._clock = None
+        self.gameDisplay = pygame.display.set_mode((self.windowWidth,self.windowHeight))
         self.player_sprites = pygame.sprite.Group()
         self.pickup_sprites = pygame.sprite.Group()
         self.enemy_sprites = pygame.sprite.Group()
@@ -400,6 +405,7 @@ class App:
         self.spawned = False
         self.player_sprites.add(self.player)
         self.pickup_sprites.add(self.coin)
+
 
     def on_init(self):
         """ On initialization, we have to set a few constants for our game to run.
@@ -509,12 +515,55 @@ class App:
         self._display_surf.blit(score_render, (700, 10))
         pygame.display.flip()
 
+    def text_objects(self,text, font, color):
+        textSurface = font.render(text, True, color)
+        return textSurface, textSurface.get_rect()
+
+    def button(self,msg,x,y,w,h,ic,ac):
+        mouse = pygame.mouse.get_pos()
+        click = pygame.mouse.get_pressed()
+
+        if x + w > mouse[0] > x and y + h > mouse[1] > y:
+            pygame.draw.rect(self.gameDisplay, ac,(x,y,w,h))
+
+            if click[0] == 1:
+                return True
+        else:
+            pygame.draw.rect(self.gameDisplay, ic, (x,y,w,h))
+
+        smallText = pygame.font.Font('chiller.ttf',50)
+        textSurf, textRect = self.text_objects(msg,smallText, self.black)
+        textRect.center = ((x + (w/2)), (y + (h/2)))
+        self.gameDisplay.blit(textSurf, textRect)
+
     def on_execute(self):
         """ The function which runs the main game loop. Calls other functions
             to check or not to continue looping and rendering what is on screen. """
 
         if self.on_init() is False:
             self._running = False
+
+        while self._intro:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+            self.gameDisplay.fill(self.black)
+            largeText = pygame.font.Font('Chiller.ttf',115)
+            TextSurf, TextRect = self.text_objects("Pad-Dash", largeText, self.darkred)
+            TextRect.center = ((self.windowWidth/2), (self.windowHeight/3))
+            self.gameDisplay.blit(TextSurf, TextRect)
+
+            if self.button("Begin", (self.windowWidth/2 - 105), (self.windowHeight/2 + 35), 210, 70, self.darkred, self.lightred):
+                self._running = True
+                self._intro = False
+
+            if self.button("Quit", (self.windowWidth/2 - 105), (2* (self.windowHeight/3) + 35), 210, 70, self.darkred, self.lightred):
+                self._running = False
+                self._intro = False
+
+            pygame.display.update()
+            self._clock.tick(15)
 
         while self._running:
             for event in pygame.event.get():
