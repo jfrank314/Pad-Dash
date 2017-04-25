@@ -1,5 +1,6 @@
 """ We dashin' now. """
 
+import math
 import os
 from random import randint
 import pygame
@@ -243,6 +244,10 @@ class Player(pygame.sprite.Sprite):
             self.direction = "IF"
         self.change_y = magnitude * 1.0 * self.speed
 
+    def current_location(self):
+        """ Gives the player's current location. """
+        return self.rect.x, self.rect.y
+
 
 class Padraicula(pygame.sprite.Sprite):
     """ Deals with the variables for the enemies, including positioning and movement.
@@ -251,7 +256,7 @@ class Padraicula(pygame.sprite.Sprite):
 
     Also, initializes the enemy to be a sprite based off of the sprite passed through. """
 
-    def __init__(self, x, y, speed=1):
+    def __init__(self, xy, speed=1):
         """ Constructing an enemy! """
 
         # Using the parent (sprite) constructor.
@@ -301,8 +306,8 @@ class Padraicula(pygame.sprite.Sprite):
         self.frame = 0
         self.count = 0
         self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
+        self.rect.x = xy[0]
+        self.rect.y = xy[1]
         self.mask = pygame.mask.from_surface(self.image)
         self.currently_dabbing = False
 
@@ -408,7 +413,7 @@ class App:
         self.coin_count = 0
         self.spawned = False
         self.player_sprites.add(self.player)
-        self.pickup_sprites.add(self.coin)
+        self.pickup_sprites.add(Coin(randint(10, 500), randint(10, 500)) for x in range(3))
 
 
     def on_init(self):
@@ -431,8 +436,9 @@ class App:
     def on_loop(self):
         """ Deals with conditions that need to be checked every iteration of the game. """
 
-        if pygame.sprite.spritecollide(self.player, self.pickup_sprites, \
-            False, pygame.sprite.collide_mask):
+        pickups_hit = pygame.sprite.spritecollide(self.player, self.pickup_sprites, \
+            False, pygame.sprite.collide_mask)
+        if pickups_hit:
             """ Deal with player touching any sprites which are pickups.
                 This can be extended to just more than coins. """
 
@@ -445,7 +451,7 @@ class App:
             quadrants = [(0, 0), (self.windowWidth / 2, 0), \
                 (self.windowHeight / 2, 0), (self.windowHeight / 2, self.windowHeight / 2)]
 
-            player_position = (self.player.rect.x, self.player.rect.y)
+            player_position = self.player.current_location()
             player_quadrant = -1
 
             if 0 <= player_position[0] < self.windowHeight / 2:
@@ -474,15 +480,26 @@ class App:
 
             x_scaling = (WIDTH * SCALING // 2)
             y_scaling = (HEIGHT * SCALING // 2)
-            self.coin.rect.x = quadrants[coin_quadrant][0] + \
+            pickups_hit[0].rect.x = quadrants[coin_quadrant][0] + \
                 randint(1, (self.windowWidth // 2) // x_scaling - 1) * x_scaling
-            self.coin.rect.y = quadrants[coin_quadrant][1] + \
+            pickups_hit[0].rect.y = quadrants[coin_quadrant][1] + \
                 randint(1, (self.windowHeight // 2) // y_scaling - 2) * y_scaling
 
         if self.coin_count % 2 == 0:
             # Deals with Padraicula spawning.
             if self.coin_count > 0 and not self.spawned:
-                enemy = Padraicula(1400, 700)
+                # Try to spawn him in the furthest corner.
+                spawn_locations = [(10, 10), (1450, 10), (10, 750), (1450, 750)]
+                player_location = self.player.current_location()
+                furthest_distance = -1
+                spawn_at = 0
+                for index, spawn in enumerate(spawn_locations):
+                    distance = math.sqrt((player_location[0] - spawn[0]) ** 2 +
+                        (player_location[1] - spawn[1]) ** 2)
+                    if distance > furthest_distance:
+                        furthest_distance = distance
+                        spawn_at = index
+                enemy = Padraicula(spawn_locations[spawn_at])
                 self.enemy_sprites.add(enemy)
                 self.spawned = True
         else:
