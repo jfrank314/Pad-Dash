@@ -1,5 +1,3 @@
-"""#!/usr/bin/env python"""
-
 """ We dashin' now. """
 
 import os
