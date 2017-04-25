@@ -19,6 +19,9 @@ class SpriteHelper:
         self.matrix = [[(x * 32, y * 32) for x in range(7)] for y in range(8)]
 
     def lookup(self, coords):
+        """ Looks up in which row and column that a certain set of coordinates are.
+            Seriously, a lot better than before. """
+
         x = coords[0]
         y = coords[1]
         return self.matrix[y][x][0], self.matrix[y][x][1]
