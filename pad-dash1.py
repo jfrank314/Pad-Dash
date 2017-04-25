@@ -1,7 +1,6 @@
-#!/usr/bin/env python
-
 """ We dashin' now. """
 
+import math
 import os
 from random import randint
 import pygame
@@ -21,6 +20,9 @@ class SpriteHelper:
         self.matrix = [[(x * 32, y * 32) for x in range(7)] for y in range(8)]
 
     def lookup(self, coords):
+        """ Looks up in which row and column that a certain set of coordinates are.
+            Seriously, a lot better than before. """
+
         x = coords[0]
         y = coords[1]
         return self.matrix[y][x][0], self.matrix[y][x][1]
@@ -98,14 +100,16 @@ class Player(pygame.sprite.Sprite):
         for value in lookup_table:
             pixel_x, pixel_y = SPRITEHELPER.lookup(value)
             image = sprite_sheet.get_image(pixel_x, pixel_y, WIDTH, HEIGHT, CHROMA)
-            self.f_idle_front.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
+            self.f_idle_front.append(pygame.transform.scale(image, \
+                (WIDTH * SCALING, HEIGHT * SCALING)))
 
         lookup_table = [(4, 4), (5, 4), (6, 4), (0, 5), (1, 5), (2, 5), (3, 5)]
 
         for value in lookup_table:
             pixel_x, pixel_y = SPRITEHELPER.lookup(value)
             image = sprite_sheet.get_image(pixel_x, pixel_y, WIDTH, HEIGHT, CHROMA)
-            self.f_idle_back.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
+            self.f_idle_back.append(pygame.transform.scale(image, \
+                (WIDTH * SCALING, HEIGHT * SCALING)))
 
         lookup_table = [(1, 1), (1, 2), (1, 1), (1, 3), (2, 1), (2, 2), (2, 1), (2, 3), \
                         (3, 1), (3, 2), (3, 1), (3, 3), (4, 1), (4, 2), (4, 1), (4, 3), \
@@ -115,7 +119,8 @@ class Player(pygame.sprite.Sprite):
         for value in lookup_table:
             pixel_x, pixel_y = SPRITEHELPER.lookup(value)
             image = sprite_sheet.get_image(pixel_x, pixel_y, WIDTH, HEIGHT, CHROMA)
-            self.f_walking_front.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
+            self.f_walking_front.append(pygame.transform.scale(image, \
+                (WIDTH * SCALING, HEIGHT * SCALING)))
 
         lookup_table = [(4, 4), (4, 5), (4, 4), (4, 6), (5, 4), (5, 5), (5, 4), (5, 6), \
                         (6, 4), (6, 5), (6, 4), (6, 6), (0, 5), (0, 6), (0, 5), (0, 7), \
@@ -125,7 +130,8 @@ class Player(pygame.sprite.Sprite):
         for value in lookup_table:
             pixel_x, pixel_y = SPRITEHELPER.lookup(value)
             image = sprite_sheet.get_image(pixel_x, pixel_y, WIDTH, HEIGHT, CHROMA)
-            self.f_walking_back.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
+            self.f_walking_back.append(pygame.transform.scale(image, \
+                (WIDTH * SCALING, HEIGHT * SCALING)))
 
         self.image = self.f_idle_front[0]
         self.frame = 0
@@ -238,6 +244,10 @@ class Player(pygame.sprite.Sprite):
             self.direction = "IF"
         self.change_y = magnitude * 1.0 * self.speed
 
+    def current_location(self):
+        """ Gives the player's current location. """
+        return self.rect.x, self.rect.y
+
 
 class Padraicula(pygame.sprite.Sprite):
     """ Deals with the variables for the enemies, including positioning and movement.
@@ -246,7 +256,7 @@ class Padraicula(pygame.sprite.Sprite):
 
     Also, initializes the enemy to be a sprite based off of the sprite passed through. """
 
-    def __init__(self, x, y, speed=1):
+    def __init__(self, xy, speed=1):
         """ Constructing an enemy! """
 
         # Using the parent (sprite) constructor.
@@ -296,8 +306,8 @@ class Padraicula(pygame.sprite.Sprite):
         self.frame = 0
         self.count = 0
         self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
+        self.rect.x = xy[0]
+        self.rect.y = xy[1]
         self.mask = pygame.mask.from_surface(self.image)
         self.currently_dabbing = False
 
@@ -317,8 +327,6 @@ class Padraicula(pygame.sprite.Sprite):
         if randint(1, 1000) == 1000 and self.direction == "WF":
             self.currently_dabbing = True
             self.image = self.f_dab_front[0]
-
-        if self.currently_dabbing == True:
             self.dabbing_direction = randint(1, 4)
             if self.dabbing_direction == 1:
                 self.image = pygame.transform.flip(self.f_dab_front[0], False, False)
@@ -328,6 +336,8 @@ class Padraicula(pygame.sprite.Sprite):
                 self.image = pygame.transform.flip(self.f_dab_front[0], False, True)
             else:
                 self.image = pygame.transform.flip(self.f_dab_front[0], True, True)
+
+        if self.currently_dabbing:
             if self.count == 15:
                 self.count = 0
                 self.direction = "WF"
@@ -386,7 +396,7 @@ class App:
     windowHeight = 900
     darkred = (112, 16, 16)
     lightred = (160, 22, 22)
-    black = (0,0,0)
+    black = (0, 0, 0)
 
     def __init__(self):
         self._intro = True
@@ -395,16 +405,14 @@ class App:
             pygame.HWSURFACE)
         self._font_score = None
         self._clock = None
-        self.gameDisplay = pygame.display.set_mode((self.windowWidth,self.windowHeight))
         self.player_sprites = pygame.sprite.Group()
         self.pickup_sprites = pygame.sprite.Group()
         self.enemy_sprites = pygame.sprite.Group()
         self.player = Player()
-        self.coin = Coin(randint(10, 300), randint(10, 300))
         self.coin_count = 0
         self.spawned = False
         self.player_sprites.add(self.player)
-        self.pickup_sprites.add(self.coin)
+        self.pickup_sprites.add(Coin(randint(10, 500), randint(10, 500)) for x in range(3))
 
 
     def on_init(self):
@@ -427,8 +435,9 @@ class App:
     def on_loop(self):
         """ Deals with conditions that need to be checked every iteration of the game. """
 
-        if pygame.sprite.spritecollide(self.player, self.pickup_sprites, \
-            False, pygame.sprite.collide_mask):
+        pickups_hit = pygame.sprite.spritecollide(self.player, self.pickup_sprites, \
+            False, pygame.sprite.collide_mask)
+        if pickups_hit:
             """ Deal with player touching any sprites which are pickups.
                 This can be extended to just more than coins. """
 
@@ -441,7 +450,7 @@ class App:
             quadrants = [(0, 0), (self.windowWidth / 2, 0), \
                 (self.windowHeight / 2, 0), (self.windowHeight / 2, self.windowHeight / 2)]
 
-            player_position = (self.player.rect.x, self.player.rect.y)
+            player_position = self.player.current_location()
             player_quadrant = -1
 
             if 0 <= player_position[0] < self.windowHeight / 2:
@@ -470,15 +479,26 @@ class App:
 
             x_scaling = (WIDTH * SCALING // 2)
             y_scaling = (HEIGHT * SCALING // 2)
-            self.coin.rect.x = quadrants[coin_quadrant][0] + \
+            pickups_hit[0].rect.x = quadrants[coin_quadrant][0] + \
                 randint(1, (self.windowWidth // 2) // x_scaling - 1) * x_scaling
-            self.coin.rect.y = quadrants[coin_quadrant][1] + \
+            pickups_hit[0].rect.y = quadrants[coin_quadrant][1] + \
                 randint(1, (self.windowHeight // 2) // y_scaling - 2) * y_scaling
 
         if self.coin_count % 2 == 0:
             # Deals with Padraicula spawning.
             if self.coin_count > 0 and not self.spawned:
-                enemy = Padraicula(1400, 700)
+                # Try to spawn him in the furthest corner.
+                spawn_locations = [(10, 10), (1450, 10), (10, 750), (1450, 750)]
+                player_location = self.player.current_location()
+                furthest_distance = -1
+                spawn_at = 0
+                for index, spawn in enumerate(spawn_locations):
+                    distance = math.sqrt((player_location[0] - spawn[0]) ** 2 + \
+                        (player_location[1] - spawn[1]) ** 2)
+                    if distance > furthest_distance:
+                        furthest_distance = distance
+                        spawn_at = index
+                enemy = Padraicula(spawn_locations[spawn_at])
                 self.enemy_sprites.add(enemy)
                 self.spawned = True
         else:
@@ -512,29 +532,32 @@ class App:
         self.pickup_sprites.draw(self._display_surf)
         self.enemy_sprites.draw(self._display_surf)
         score_render = self._font_score.render(str(self.coin_count), False, (255, 255, 255))
-        self._display_surf.blit(score_render, (700, 10))
+        self._display_surf.blit(score_render, (PADDASH.windowWidth // 2 - 64, 10))
         pygame.display.flip()
 
-    def text_objects(self,text, font, color):
-        textSurface = font.render(text, True, color)
-        return textSurface, textSurface.get_rect()
+    def text_objects(self, text, font, input_color):
+        """ Takes in text, a font, and the color you want, and produces a text surface. """
+        text_surface = font.render(text, True, input_color)
+        return text_surface, text_surface.get_rect()
 
-    def button(self,msg,x,y,w,h,ic,ac):
+    def button(self, msg, x, y, w, h, ic, ac):
+        """ Creates a button which returns true if click is triggered. Otherwise,
+            stays where it's placed. """
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
 
         if x + w > mouse[0] > x and y + h > mouse[1] > y:
-            pygame.draw.rect(self.gameDisplay, ac,(x,y,w,h))
+            pygame.draw.rect(self._display_surf, ac, (x, y, w, h))
 
             if click[0] == 1:
                 return True
         else:
-            pygame.draw.rect(self.gameDisplay, ic, (x,y,w,h))
+            pygame.draw.rect(self._display_surf, ic, (x, y, w, h))
 
-        smallText = pygame.font.Font('chiller.ttf',50)
-        textSurf, textRect = self.text_objects(msg,smallText, self.black)
-        textRect.center = ((x + (w/2)), (y + (h/2)))
-        self.gameDisplay.blit(textSurf, textRect)
+        small_text = pygame.font.Font(os.path.join("assets", "chiller.ttf"), 50)
+        text_surf, text_rect = self.text_objects(msg, small_text, self.black)
+        text_rect.center = ((x + (w / 2)), (y + (h / 2)))
+        self._display_surf.blit(text_surf, text_rect)
 
     def on_execute(self):
         """ The function which runs the main game loop. Calls other functions
@@ -547,23 +570,24 @@ class App:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
-                    quit()
-            self.gameDisplay.fill(self.black)
-            largeText = pygame.font.Font('Chiller.ttf',115)
-            TextSurf, TextRect = self.text_objects("Pad-Dash", largeText, self.darkred)
-            TextRect.center = ((self.windowWidth/2), (self.windowHeight/3))
-            self.gameDisplay.blit(TextSurf, TextRect)
 
-            if self.button("Begin", (self.windowWidth/2 - 105), (self.windowHeight/2 + 35), 210, 70, self.darkred, self.lightred):
+            self._display_surf.fill(self.black)
+            large_text = pygame.font.Font(os.path.join("assets", "chiller.ttf"), 115)
+            text_surf, text_rect = self.text_objects("Pad-Dash", large_text, self.darkred)
+            text_rect.center = ((self.windowWidth / 2), (self.windowHeight / 3))
+            self._display_surf.blit(text_surf, text_rect)
+
+            if self.button("Begin", (self.windowWidth/2 - 105), (self.windowHeight/2 + 35), \
+                210, 70, self.darkred, self.lightred):
                 self._running = True
                 self._intro = False
 
-            if self.button("Quit", (self.windowWidth/2 - 105), (2* (self.windowHeight/3) + 35), 210, 70, self.darkred, self.lightred):
+            if self.button("Quit", (self.windowWidth/2 - 105), (2* (self.windowHeight/3) + 35), \
+                210, 70, self.darkred, self.lightred):
                 self._running = False
                 self._intro = False
 
             pygame.display.update()
-            self._clock.tick(15)
 
         while self._running:
             for event in pygame.event.get():
