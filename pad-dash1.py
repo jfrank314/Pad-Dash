@@ -317,8 +317,6 @@ class Padraicula(pygame.sprite.Sprite):
         if randint(1, 1000) == 1000 and self.direction == "WF":
             self.currently_dabbing = True
             self.image = self.f_dab_front[0]
-
-        if self.currently_dabbing == True:
             self.dabbing_direction = randint(1, 4)
             if self.dabbing_direction == 1:
                 self.image = pygame.transform.flip(self.f_dab_front[0], False, False)
@@ -328,6 +326,8 @@ class Padraicula(pygame.sprite.Sprite):
                 self.image = pygame.transform.flip(self.f_dab_front[0], False, True)
             else:
                 self.image = pygame.transform.flip(self.f_dab_front[0], True, True)
+
+        if self.currently_dabbing == True:
             if self.count == 15:
                 self.count = 0
                 self.direction = "WF"
