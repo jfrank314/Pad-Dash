@@ -403,7 +403,6 @@ class App:
         self._running = True
         self._display_surf = pygame.display.set_mode((self.windowWidth, self.windowHeight), \
             pygame.HWSURFACE)
-        self._font_score = None
         self._clock = None
         self.player_sprites = pygame.sprite.Group()
         self.pickup_sprites = pygame.sprite.Group()
@@ -425,7 +424,6 @@ class App:
         pygame.display.set_caption('Pad-Dash')
         self._clock = pygame.time.Clock()
         self._running = True
-        self._font_score = pygame.font.SysFont("monospace", 64)
 
         pygame.mixer.init()
         pygame.mixer.music.load(os.path.join("assets", "background_music.mp3"))
@@ -531,8 +529,10 @@ class App:
         self.player_sprites.draw(self._display_surf)
         self.pickup_sprites.draw(self._display_surf)
         self.enemy_sprites.draw(self._display_surf)
-        score_render = self._font_score.render(str(self.coin_count), False, (255, 255, 255))
-        self._display_surf.blit(score_render, (PADDASH.windowWidth // 2 - 64, 10))
+        score_font = pygame.font.Font(os.path.join("assets", "LCD_solid.ttf"), 64)
+        score_surf, score_rect = self.text_objects(str(self.coin_count), score_font, (255, 255, 255))
+        score_rect.center = ((self.windowWidth / 2), 64)
+        self._display_surf.blit(score_surf, score_rect)
         pygame.display.flip()
 
     def text_objects(self, text, font, input_color):
