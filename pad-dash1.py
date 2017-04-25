@@ -411,7 +411,8 @@ class App:
         self.coin_count = 0
         self.spawned = False
         self.player_sprites.add(self.player)
-        self.pickup_sprites.add(Coin(randint(10, 500), randint(10, 500)) for x in range(3))
+        self.pickup_sprites.add(Coin(randint(10, self.windowWidth - 10), \
+            randint(10, self.windowHeight - 10)) for x in range(3))
 
 
     def on_init(self):
@@ -478,9 +479,11 @@ class App:
             x_scaling = (WIDTH * SCALING // 2)
             y_scaling = (HEIGHT * SCALING // 2)
             pickups_hit[0].rect.x = quadrants[coin_quadrant][0] + \
-                randint(1, (self.windowWidth // 2) // x_scaling - 1) * x_scaling
+                (randint(1, (self.windowWidth // 2) // x_scaling - 1) * x_scaling) + \
+                randint(-16, 16)
             pickups_hit[0].rect.y = quadrants[coin_quadrant][1] + \
-                randint(1, (self.windowHeight // 2) // y_scaling - 2) * y_scaling
+                randint(1, (self.windowHeight // 2) // y_scaling - 2) * y_scaling + \
+                randint(-16, 16)
 
         if self.coin_count % 2 == 0:
             # Deals with Padraicula spawning.
@@ -588,7 +591,7 @@ class App:
                     if event.key == special_keys[2]:
                         pressed[2] = 0
             if sum(pressed) == 3:
-                rip_text = pygame.font.Font(os.path.join("assets", "chiller.ttf"), 50)
+                rip_text = pygame.font.Font(os.path.join("assets", "chiller.ttf"), 20)
                 text_surf, text_rect = self.text_objects("RIP Sean", rip_text, self.darkred)
                 text_rect.center = ((self.windowWidth / 2), (self.windowHeight / 2))
                 self._display_surf.blit(text_surf, text_rect)
@@ -618,7 +621,7 @@ class App:
                 right = (pygame.K_RIGHT, pygame.K_d)
                 left = (pygame.K_LEFT, pygame.K_a)
                 up = (pygame.K_UP, pygame.K_w)
-                down = (pygame.K_DOWN, pygame.K_d)
+                down = (pygame.K_DOWN, pygame.K_s)
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
