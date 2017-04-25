@@ -554,7 +554,7 @@ class App:
         else:
             pygame.draw.rect(self._display_surf, ic, (x, y, w, h))
 
-        small_text = pygame.font.Font('chiller.ttf', 50)
+        small_text = pygame.font.Font(os.path.join("assets", "chiller.ttf"), 50)
         text_surf, text_rect = self.text_objects(msg, small_text, self.black)
         text_rect.center = ((x + (w / 2)), (y + (h / 2)))
         self._display_surf.blit(text_surf, text_rect)
@@ -572,7 +572,7 @@ class App:
                     pygame.quit()
 
             self._display_surf.fill(self.black)
-            large_text = pygame.font.Font('Chiller.ttf', 115)
+            large_text = pygame.font.Font(os.path.join("assets", "chiller.ttf"), 115)
             text_surf, text_rect = self.text_objects("Pad-Dash", large_text, self.darkred)
             text_rect.center = ((self.windowWidth / 2), (self.windowHeight / 3))
             self._display_surf.blit(text_surf, text_rect)
