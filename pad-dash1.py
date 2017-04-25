@@ -337,7 +337,7 @@ class Padraicula(pygame.sprite.Sprite):
             else:
                 self.image = pygame.transform.flip(self.f_dab_front[0], True, True)
 
-        if self.currently_dabbing == True:
+        if self.currently_dabbing:
             if self.count == 15:
                 self.count = 0
                 self.direction = "WF"
@@ -493,7 +493,7 @@ class App:
                 furthest_distance = -1
                 spawn_at = 0
                 for index, spawn in enumerate(spawn_locations):
-                    distance = math.sqrt((player_location[0] - spawn[0]) ** 2 +
+                    distance = math.sqrt((player_location[0] - spawn[0]) ** 2 + \
                         (player_location[1] - spawn[1]) ** 2)
                     if distance > furthest_distance:
                         furthest_distance = distance
