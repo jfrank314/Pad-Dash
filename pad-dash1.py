@@ -566,12 +566,33 @@ class App:
         if self.on_init() is False:
             self._running = False
 
+        pressed = [0, 0, 0]
+        special_keys = [pygame.K_r, pygame.K_i, pygame.K_p]
         while self._intro:
+            self._display_surf.fill(self.black)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == special_keys[0]:
+                        pressed[0] = 1
+                    if event.key == special_keys[1]:
+                        pressed[1] = 1
+                    if event.key == special_keys[2]:
+                        pressed[2] = 1
+                if event.type == pygame.KEYUP:
+                    if event.key == special_keys[0]:
+                        pressed[0] = 0
+                    if event.key == special_keys[1]:
+                        pressed[1] = 0
+                    if event.key == special_keys[2]:
+                        pressed[2] = 0
+            if sum(pressed) == 3:
+                rip_text = pygame.font.Font(os.path.join("assets", "chiller.ttf"), 50)
+                text_surf, text_rect = self.text_objects("RIP Sean", rip_text, self.darkred)
+                text_rect.center = ((self.windowWidth / 2), (self.windowHeight / 2))
+                self._display_surf.blit(text_surf, text_rect)
 
-            self._display_surf.fill(self.black)
             large_text = pygame.font.Font(os.path.join("assets", "chiller.ttf"), 115)
             text_surf, text_rect = self.text_objects("Pad-Dash", large_text, self.darkred)
             text_rect.center = ((self.windowWidth / 2), (self.windowHeight / 3))
