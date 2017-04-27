@@ -1,5 +1,6 @@
 """ We dashin' now. """
 
+import itertools
 import math
 import os
 from random import randint
@@ -525,8 +526,14 @@ class App:
 
     def on_render(self):
         """ Deals with rendering things on screen. """
-
+        floor = pygame.transform.scale(pygame.image.load(os.path.join("assets", \
+            "Floor.png")), (c.SPRITEWIDTH * c.SCALING, c.SPRITEHEIGHT * c.SCALING))
         self._display_surf.fill((128, 128, 128))
+        self._display_surf.blit(floor, (0, 0))
+        floor_width, floor_height = floor.get_width(), floor.get_height()
+        for x, y in itertools.product(range(0, c.WINDOWWIDTH + 1, floor_width), \
+            range(0, c.WINDOWHEIGHT + 1, floor_height)):
+                self._display_surf.blit(floor, (x, y))
         self.player_sprites.draw(self._display_surf)
         self.pickup_sprites.draw(self._display_surf)
         self.enemy_sprites.draw(self._display_surf)
