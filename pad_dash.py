@@ -1,10 +1,9 @@
 """ We dashin' now. """
 
-import itertools
 import math
 import os
 from random import randint
-from profilehooks import profile
+#from profilehooks import profile
 import pygame
 import constants as c
 from spritesheet_functions import SpriteSheet
@@ -565,7 +564,7 @@ class App:
         text_rect.center = ((x + (w / 2)), (y + (h / 2)))
         self._display_surf.blit(text_surf, text_rect)
 
-    @profile
+    #@profile
     def on_execute(self):
         """ The function which runs the main game loop. Calls other functions
             to check or not to continue looping and rendering what is on screen. """
