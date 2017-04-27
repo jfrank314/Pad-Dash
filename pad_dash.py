@@ -46,8 +46,10 @@ class Coin(pygame.sprite.Sprite):
         lookup_table = [(0, 1)]
         for value in lookup_table:
             pixel_x, pixel_y = SPRITEHELPER.lookup(value)
-            image = sprite_sheet.get_image(pixel_x, pixel_y, c.SPRITEWIDTH, c.SPRITEHEIGHT, c.CHROMA)
-            self.f_coin.append(pygame.transform.scale(image, (c.SPRITEWIDTH * c.SCALING, c.SPRITEHEIGHT * c.SCALING)))
+            image = sprite_sheet.get_image(pixel_x, pixel_y, \
+                c.SPRITEWIDTH, c.SPRITEHEIGHT, c.CHROMA)
+            self.f_coin.append(pygame.transform.scale(image, \
+                (c.SPRITEWIDTH * c.SCALING, c.SPRITEHEIGHT * c.SCALING)))
 
         self.image = self.f_coin[0]
         self.rect = self.image.get_rect()
@@ -95,7 +97,8 @@ class Player(pygame.sprite.Sprite):
 
         for value in lookup_table:
             pixel_x, pixel_y = SPRITEHELPER.lookup(value)
-            image = sprite_sheet.get_image(pixel_x, pixel_y, c.SPRITEWIDTH, c.SPRITEHEIGHT, c.CHROMA)
+            image = sprite_sheet.get_image(pixel_x, pixel_y, \
+                c.SPRITEWIDTH, c.SPRITEHEIGHT, c.CHROMA)
             self.f_idle_front.append(pygame.transform.scale(image, \
                 (c.SPRITEWIDTH * c.SCALING, c.SPRITEHEIGHT * c.SCALING)))
 
@@ -103,7 +106,8 @@ class Player(pygame.sprite.Sprite):
 
         for value in lookup_table:
             pixel_x, pixel_y = SPRITEHELPER.lookup(value)
-            image = sprite_sheet.get_image(pixel_x, pixel_y, c.SPRITEWIDTH, c.SPRITEHEIGHT, c.CHROMA)
+            image = sprite_sheet.get_image(pixel_x, pixel_y, \
+                c.SPRITEWIDTH, c.SPRITEHEIGHT, c.CHROMA)
             self.f_idle_back.append(pygame.transform.scale(image, \
                 (c.SPRITEWIDTH * c.SCALING, c.SPRITEHEIGHT * c.SCALING)))
 
@@ -114,7 +118,8 @@ class Player(pygame.sprite.Sprite):
 
         for value in lookup_table:
             pixel_x, pixel_y = SPRITEHELPER.lookup(value)
-            image = sprite_sheet.get_image(pixel_x, pixel_y, c.SPRITEWIDTH, c.SPRITEHEIGHT, c.CHROMA)
+            image = sprite_sheet.get_image(pixel_x, pixel_y, \
+                c.SPRITEWIDTH, c.SPRITEHEIGHT, c.CHROMA)
             self.f_walking_front.append(pygame.transform.scale(image, \
                 (c.SPRITEWIDTH * c.SCALING, c.SPRITEHEIGHT * c.SCALING)))
 
@@ -125,7 +130,8 @@ class Player(pygame.sprite.Sprite):
 
         for value in lookup_table:
             pixel_x, pixel_y = SPRITEHELPER.lookup(value)
-            image = sprite_sheet.get_image(pixel_x, pixel_y, c.SPRITEWIDTH, c.SPRITEHEIGHT, c.CHROMA)
+            image = sprite_sheet.get_image(pixel_x, pixel_y, \
+                c.SPRITEWIDTH, c.SPRITEHEIGHT, c.CHROMA)
             self.f_walking_back.append(pygame.transform.scale(image, \
                 (c.SPRITEWIDTH * c.SCALING, c.SPRITEHEIGHT * c.SCALING)))
 
