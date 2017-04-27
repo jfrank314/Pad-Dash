@@ -3,14 +3,10 @@
 import math
 import os
 from random import randint
+from profilehooks import profile
 import pygame
-from pygame.locals import *
+import constants as c
 from spritesheet_functions import SpriteSheet
-
-WIDTH = 32
-HEIGHT = 32
-SCALING = 4
-CHROMA = (0, 255, 0)
 
 class SpriteHelper:
     """ We need a better way of addressing sprite locations.
@@ -50,8 +46,8 @@ class Coin(pygame.sprite.Sprite):
         lookup_table = [(0, 1)]
         for value in lookup_table:
             pixel_x, pixel_y = SPRITEHELPER.lookup(value)
-            image = sprite_sheet.get_image(pixel_x, pixel_y, WIDTH, HEIGHT, CHROMA)
-            self.f_coin.append(pygame.transform.scale(image, (WIDTH * SCALING, HEIGHT * SCALING)))
+            image = sprite_sheet.get_image(pixel_x, pixel_y, c.SPRITEWIDTH, c.SPRITEHEIGHT, c.CHROMA)
+            self.f_coin.append(pygame.transform.scale(image, (c.SPRITEWIDTH * c.SCALING, c.SPRITEHEIGHT * c.SCALING)))
 
         self.image = self.f_coin[0]
         self.rect = self.image.get_rect()
@@ -99,17 +95,17 @@ class Player(pygame.sprite.Sprite):
 
         for value in lookup_table:
             pixel_x, pixel_y = SPRITEHELPER.lookup(value)
-            image = sprite_sheet.get_image(pixel_x, pixel_y, WIDTH, HEIGHT, CHROMA)
+            image = sprite_sheet.get_image(pixel_x, pixel_y, c.SPRITEWIDTH, c.SPRITEHEIGHT, c.CHROMA)
             self.f_idle_front.append(pygame.transform.scale(image, \
-                (WIDTH * SCALING, HEIGHT * SCALING)))
+                (c.SPRITEWIDTH * c.SCALING, c.SPRITEHEIGHT * c.SCALING)))
 
         lookup_table = [(4, 4), (5, 4), (6, 4), (0, 5), (1, 5), (2, 5), (3, 5)]
 
         for value in lookup_table:
             pixel_x, pixel_y = SPRITEHELPER.lookup(value)
-            image = sprite_sheet.get_image(pixel_x, pixel_y, WIDTH, HEIGHT, CHROMA)
+            image = sprite_sheet.get_image(pixel_x, pixel_y, c.SPRITEWIDTH, c.SPRITEHEIGHT, c.CHROMA)
             self.f_idle_back.append(pygame.transform.scale(image, \
-                (WIDTH * SCALING, HEIGHT * SCALING)))
+                (c.SPRITEWIDTH * c.SCALING, c.SPRITEHEIGHT * c.SCALING)))
 
         lookup_table = [(1, 1), (1, 2), (1, 1), (1, 3), (2, 1), (2, 2), (2, 1), (2, 3), \
                         (3, 1), (3, 2), (3, 1), (3, 3), (4, 1), (4, 2), (4, 1), (4, 3), \
@@ -118,9 +114,9 @@ class Player(pygame.sprite.Sprite):
 
         for value in lookup_table:
             pixel_x, pixel_y = SPRITEHELPER.lookup(value)
-            image = sprite_sheet.get_image(pixel_x, pixel_y, WIDTH, HEIGHT, CHROMA)
+            image = sprite_sheet.get_image(pixel_x, pixel_y, c.SPRITEWIDTH, c.SPRITEHEIGHT, c.CHROMA)
             self.f_walking_front.append(pygame.transform.scale(image, \
-                (WIDTH * SCALING, HEIGHT * SCALING)))
+                (c.SPRITEWIDTH * c.SCALING, c.SPRITEHEIGHT * c.SCALING)))
 
         lookup_table = [(4, 4), (4, 5), (4, 4), (4, 6), (5, 4), (5, 5), (5, 4), (5, 6), \
                         (6, 4), (6, 5), (6, 4), (6, 6), (0, 5), (0, 6), (0, 5), (0, 7), \
@@ -129,9 +125,9 @@ class Player(pygame.sprite.Sprite):
 
         for value in lookup_table:
             pixel_x, pixel_y = SPRITEHELPER.lookup(value)
-            image = sprite_sheet.get_image(pixel_x, pixel_y, WIDTH, HEIGHT, CHROMA)
+            image = sprite_sheet.get_image(pixel_x, pixel_y, c.SPRITEWIDTH, c.SPRITEHEIGHT, c.CHROMA)
             self.f_walking_back.append(pygame.transform.scale(image, \
-                (WIDTH * SCALING, HEIGHT * SCALING)))
+                (c.SPRITEWIDTH * c.SCALING, c.SPRITEHEIGHT * c.SCALING)))
 
         self.image = self.f_idle_front[0]
         self.frame = 0
@@ -144,10 +140,10 @@ class Player(pygame.sprite.Sprite):
     def update(self):
         """ Updates the current position of the rectangle on screen. """
 
-        if self.rect.x + WIDTH * SCALING + self.change_x < PADDASH.windowWidth:
+        if self.rect.x + c.SPRITEWIDTH * c.SCALING + self.change_x < c.WINDOWWIDTH:
             if self.rect.x + self.change_x > 0:
                 self.rect.x += self.change_x
-        if self.rect.y + HEIGHT * SCALING + self.change_y < PADDASH.windowHeight:
+        if self.rect.y + c.SPRITEHEIGHT * c.SCALING + self.change_y < c.WINDOWHEIGHT:
             if self.rect.y + self.change_y > 0:
                 self.rect.y += self.change_y
 
@@ -282,25 +278,28 @@ class Padraicula(pygame.sprite.Sprite):
 
         for value in lookup_table:
             pixel_x, pixel_y = SPRITEHELPER.lookup(value)
-            image = sprite_sheet.get_image(pixel_x, pixel_y, WIDTH, HEIGHT, CHROMA)
+            image = sprite_sheet.get_image(pixel_x, pixel_y, \
+                c.SPRITEWIDTH, c.SPRITEHEIGHT, c.CHROMA)
             self.f_walking_front.append(pygame.transform.scale(image, \
-                (WIDTH * SCALING, HEIGHT * SCALING)))
+                (c.SPRITEWIDTH * c.SCALING, c.SPRITEHEIGHT * c.SCALING)))
 
         lookup_table = [(3, 0), (4, 0), (3, 0), (5, 0)]
 
         for value in lookup_table:
             pixel_x, pixel_y = SPRITEHELPER.lookup(value)
-            image = sprite_sheet.get_image(pixel_x, pixel_y, WIDTH, HEIGHT, CHROMA)
+            image = sprite_sheet.get_image(pixel_x, pixel_y, \
+                c.SPRITEWIDTH, c.SPRITEHEIGHT, c.CHROMA)
             self.f_walking_back.append(pygame.transform.scale(image, \
-                (WIDTH * SCALING, HEIGHT * SCALING)))
+                (c.SPRITEWIDTH * c.SCALING, c.SPRITEHEIGHT * c.SCALING)))
 
         lookup_table = [(6, 0)]
 
         for value in lookup_table:
             pixel_x, pixel_y = SPRITEHELPER.lookup(value)
-            image = sprite_sheet.get_image(pixel_x, pixel_y, WIDTH, HEIGHT, CHROMA)
+            image = sprite_sheet.get_image(pixel_x, pixel_y, \
+                c.SPRITEWIDTH, c.SPRITEHEIGHT, c.CHROMA)
             self.f_dab_front.append(pygame.transform.scale(image, \
-                (WIDTH * SCALING, HEIGHT * SCALING)))
+                (c.SPRITEWIDTH * c.SCALING, c.SPRITEHEIGHT * c.SCALING)))
 
         self.image = self.f_walking_front[0]
         self.frame = 0
@@ -314,10 +313,10 @@ class Padraicula(pygame.sprite.Sprite):
     def update(self):
         """ Updates the current position of the rectangle on screen. """
 
-        if self.rect.x + WIDTH * SCALING + self.change_x < PADDASH.windowWidth:
+        if self.rect.x + c.SPRITEWIDTH * c.SCALING + self.change_x < c.WINDOWWIDTH:
             if self.rect.x + self.change_x > 0:
                 self.rect.x += self.change_x
-        if self.rect.y + HEIGHT * SCALING + self.change_y < PADDASH.windowHeight:
+        if self.rect.y + c.SPRITEHEIGHT * c.SCALING + self.change_y < c.WINDOWHEIGHT:
             if self.rect.y + self.change_y > 0:
                 self.rect.y += self.change_y
 
@@ -392,16 +391,10 @@ class Padraicula(pygame.sprite.Sprite):
 class App:
     """ Deals with the game itself. """
 
-    windowWidth = 1600
-    windowHeight = 900
-    darkred = (112, 16, 16)
-    lightred = (160, 22, 22)
-    black = (0, 0, 0)
-
     def __init__(self):
         self._intro = True
         self._running = True
-        self._display_surf = pygame.display.set_mode((self.windowWidth, self.windowHeight), \
+        self._display_surf = pygame.display.set_mode((c.WINDOWWIDTH, c.WINDOWHEIGHT), \
             pygame.HWSURFACE)
         self._clock = None
         self.player_sprites = pygame.sprite.Group()
@@ -411,9 +404,8 @@ class App:
         self.coin_count = 0
         self.spawned = False
         self.player_sprites.add(self.player)
-        self.pickup_sprites.add(Coin(randint(10, self.windowWidth - 10), \
-            randint(10, self.windowHeight - 10)) for x in range(3))
-
+        self.pickup_sprites.add(Coin(randint(10, c.WINDOWWIDTH - 10), \
+            randint(10, c.WINDOWHEIGHT - 10)) for x in range(3))
 
     def on_init(self):
         """ On initialization, we have to set a few constants for our game to run.
@@ -446,15 +438,15 @@ class App:
                 quadrants that the game provides, and we try to spawn one in a different
                 quadrant. """
 
-            quadrants = [(0, 0), (self.windowWidth / 2, 0), \
-                (self.windowHeight / 2, 0), (self.windowHeight / 2, self.windowHeight / 2)]
+            quadrants = [(0, 0), (c.WINDOWWIDTH / 2, 0), \
+                (c.WINDOWHEIGHT / 2, 0), (c.WINDOWHEIGHT / 2, c.WINDOWHEIGHT / 2)]
 
             player_position = self.player.current_location()
             player_quadrant = -1
 
-            if 0 <= player_position[0] < self.windowHeight / 2:
+            if 0 <= player_position[0] < c.WINDOWHEIGHT / 2:
                 # Upper half of the board.
-                if 0 <= player_position[1] < self.windowWidth / 2:
+                if 0 <= player_position[1] < c.WINDOWWIDTH / 2:
                     # Upper left.
                     player_quadrant = 0
                 else:
@@ -462,7 +454,7 @@ class App:
                     player_quadrant = 1
             else:
                 # Lower half of the board.
-                if 0 <= player_position[1] < self.windowWidth / 2:
+                if 0 <= player_position[1] < c.WINDOWWIDTH / 2:
                     # Lower left.
                     player_quadrant = 2
                 else:
@@ -476,13 +468,13 @@ class App:
             if randint(0, 2) == 2:
                 coin_quadrant = player_quadrant
 
-            x_scaling = (WIDTH * SCALING // 2)
-            y_scaling = (HEIGHT * SCALING // 2)
+            x_scaling = (c.SPRITEWIDTH * c.SCALING // 2)
+            y_scaling = (c.SPRITEHEIGHT * c.SCALING // 2)
             pickups_hit[0].rect.x = quadrants[coin_quadrant][0] + \
-                (randint(1, (self.windowWidth // 2) // x_scaling - 1) * x_scaling) + \
+                (randint(1, (c.WINDOWWIDTH // 2) // x_scaling - 1) * x_scaling) + \
                 randint(-16, 16)
             pickups_hit[0].rect.y = quadrants[coin_quadrant][1] + \
-                randint(1, (self.windowHeight // 2) // y_scaling - 2) * y_scaling + \
+                randint(1, (c.WINDOWHEIGHT // 2) // y_scaling - 2) * y_scaling + \
                 randint(-16, 16)
 
         if self.coin_count % 2 == 0:
@@ -533,19 +525,22 @@ class App:
         self.pickup_sprites.draw(self._display_surf)
         self.enemy_sprites.draw(self._display_surf)
         score_font = pygame.font.Font(os.path.join("assets", "LCD_solid.ttf"), 64)
-        score_surf, score_rect = self.text_objects(str(self.coin_count), score_font, (255, 255, 255))
-        score_rect.center = ((self.windowWidth / 2), 64)
+        score_surf, score_rect = self.text_objects(str(self.coin_count), \
+            score_font, (255, 255, 255))
+        score_rect.center = ((c.WINDOWWIDTH / 2), 64)
         self._display_surf.blit(score_surf, score_rect)
         pygame.display.flip()
 
     def text_objects(self, text, font, input_color):
         """ Takes in text, a font, and the color you want, and produces a text surface. """
+
         text_surface = font.render(text, True, input_color)
         return text_surface, text_surface.get_rect()
 
     def button(self, msg, x, y, w, h, ic, ac):
         """ Creates a button which returns true if click is triggered. Otherwise,
             stays where it's placed. """
+
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
 
@@ -558,10 +553,11 @@ class App:
             pygame.draw.rect(self._display_surf, ic, (x, y, w, h))
 
         small_text = pygame.font.Font(os.path.join("assets", "chiller.ttf"), 50)
-        text_surf, text_rect = self.text_objects(msg, small_text, self.black)
+        text_surf, text_rect = self.text_objects(msg, small_text, c.BLACK)
         text_rect.center = ((x + (w / 2)), (y + (h / 2)))
         self._display_surf.blit(text_surf, text_rect)
 
+    @profile
     def on_execute(self):
         """ The function which runs the main game loop. Calls other functions
             to check or not to continue looping and rendering what is on screen. """
@@ -572,7 +568,7 @@ class App:
         pressed = [0, 0, 0]
         special_keys = [pygame.K_r, pygame.K_i, pygame.K_p]
         while self._intro:
-            self._display_surf.fill(self.black)
+            self._display_surf.fill(c.BLACK)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -592,22 +588,22 @@ class App:
                         pressed[2] = 0
             if sum(pressed) == 3:
                 rip_text = pygame.font.Font(os.path.join("assets", "chiller.ttf"), 20)
-                text_surf, text_rect = self.text_objects("RIP Sean", rip_text, self.darkred)
-                text_rect.center = ((self.windowWidth / 2), (self.windowHeight / 2))
+                text_surf, text_rect = self.text_objects("RIP Sean", rip_text, c.DARKRED)
+                text_rect.center = ((c.WINDOWWIDTH / 2), (c.WINDOWHEIGHT / 2))
                 self._display_surf.blit(text_surf, text_rect)
 
             large_text = pygame.font.Font(os.path.join("assets", "chiller.ttf"), 115)
-            text_surf, text_rect = self.text_objects("Pad-Dash", large_text, self.darkred)
-            text_rect.center = ((self.windowWidth / 2), (self.windowHeight / 3))
+            text_surf, text_rect = self.text_objects("Pad-Dash", large_text, c.DARKRED)
+            text_rect.center = ((c.WINDOWWIDTH / 2), (c.WINDOWHEIGHT / 3))
             self._display_surf.blit(text_surf, text_rect)
 
-            if self.button("Begin", (self.windowWidth/2 - 105), (self.windowHeight/2 + 35), \
-                210, 70, self.darkred, self.lightred):
+            if self.button("Begin", (c.WINDOWWIDTH/2 - 105), (c.WINDOWHEIGHT/2 + 35), \
+                210, 70, c.DARKRED, c.LIGHTRED):
                 self._running = True
                 self._intro = False
 
-            if self.button("Quit", (self.windowWidth/2 - 105), (2* (self.windowHeight/3) + 35), \
-                210, 70, self.darkred, self.lightred):
+            if self.button("Quit", (c.WINDOWWIDTH/2 - 105), (2* (c.WINDOWHEIGHT/3) + 35), \
+                210, 70, c.DARKRED, c.LIGHTRED):
                 self._running = False
                 self._intro = False
 
